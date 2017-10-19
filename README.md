@@ -18,7 +18,7 @@
 
 With `yaml-import`, the imports are relative to the current *YAML* file.
 
-### `!!import/single` *`file`*
+### `!!import/single` *file*
 
 Import the contents of a single file
 
@@ -48,7 +48,7 @@ Merge the contents of numerous files into one object or array.
 ]
 ```
 
-### `!!import/dirMerge` *`dir`*
+### `!!import/dirMerge` *dir*
 
 Same as [`!!import/merge`](#importmerge-array), but with all the files (recursive) within a directory.
 
@@ -56,7 +56,7 @@ Same as [`!!import/merge`](#importmerge-array), but with all the files (recursiv
 !!import/dirMerge myNice/dir
 ```
 
-### `!!import/dirSeq` *`dir`*
+### `!!import/dirSeq` *dir*
 
 It will create a `sequence` (array), and the contents of each of the files found within the directory (recursive) will be an element of the array.
 
@@ -64,7 +64,7 @@ It will create a `sequence` (array), and the contents of each of the files found
 !!import/dirSeq myNice/dir
 ```
 
-### `!!import/dirMap` *`dir`*
+### `!!import/dirMap` *dir*
 
 It will create an `mapping` (object) with keys equivalent to the directory tree and files (nested).
 
