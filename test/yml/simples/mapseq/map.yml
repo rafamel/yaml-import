@@ -1,0 +1,7 @@
+it: 'is not that'
+i:
+    do: not like
+    yaml: but it is that
+should:
+    not: we rather
+    enjoy: modularity
