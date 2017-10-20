@@ -5,11 +5,17 @@
   "description": "Import files and directories in YAML for a modular design",
   "homepage": "https://github.com/rafamel/yaml-import",
   "main": "./lib/index",
+  "bin": {
+    "yimp": "bin/yimp.js"
+  },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint lib/*.js",
-    "test": "npm run test:lint && ./node_modules/.bin/jest ./test/*.js --runInBand --runTestsByPath --verbose",
-    "test:lint": "./node_modules/.bin/eslint test/*.js",
-    "prepublish": "npm run lint && npm run test:lint && ./node_modules/.bin/jest ./test/*.test.js --runTestsByPath",
+    "lint": "eslint lib/*.js && eslint bin/*.js",
+    "lint:test": "eslint test/*.js",
+    "lint:md": "markdownlint *.md --config markdown.json",
+    "test": "npm run lint:test && jest ./test/*.js --runInBand --runTestsByPath --verbose",
+    "watch": "nodemon ./node_modules/.bin/run-s lint test",
+    "pre": "npm run prepublishOnly",
+    "prepublishOnly": "run-s lint lint:* && jest ./test/*.test.js --runTestsByPath",
     "update:packages": "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
   },
   "contributors": [
@@ -45,13 +51,17 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
-    "eslint": "^4.7.2",
+    "eslint": "^4.9.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "jest-cli": "^21.2.1"
+    "jest-cli": "^21.2.1",
+    "markdownlint-cli": "^0.3.1",
+    "nodemon": "^1.12.1",
+    "npm-run-all": "^4.1.1",
+    "yargs": "^9.0.1"
   },
   "engines": {
     "node": ">=8.0.0"

@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/github/package-json/v/rafamel/yaml-import.svg)](https://github.com/rafamel/yaml-import)
 [![Build Status](https://travis-ci.org/rafamel/yaml-import.svg)](https://travis-ci.org/rafamel/yaml-import)
-[![Coverage](https://img.shields.io/coveralls/rafamel/yaml-import.svg)](https://coveralls.io/github/rafamel/yaml-import?branch=master)
+[![Coverage](https://img.shields.io/coveralls/rafamel/yaml-import.svg)](https://coveralls.io/github/rafamel/yaml-import)
 [![Dependencies](https://david-dm.org/rafamel/yaml-import/status.svg)](https://david-dm.org/rafamel/yaml-import)
 [![Vulnerabilities](https://snyk.io/test/npm/yaml-import/badge.svg)](https://snyk.io/test/npm/yaml-import)
 [![Issues](https://img.shields.io/github/issues/rafamel/yaml-import.svg)](https://github.com/rafamel/yaml-import/issues)
@@ -23,7 +23,7 @@ With `yaml-import`, the imports are relative to the current *YAML* file.
 Import the contents of a single file
 
 ```yaml
-some: 
+some:
     - yaml
     - where I
 import: a file like
@@ -35,7 +35,7 @@ or:
 
 ### `!!import/merge` *array*
 
-Merge the contents of numerous files into one object or array. 
+Merge the contents of numerous files into one object or array.
 
 - If all the files are objects, it will merge all the keys into one single object.
 - If one or more of the files contain any other type, it will concatenate an array (so if any of the files is an array itself, all its elements will go into the top level).
@@ -74,7 +74,30 @@ It will create an `mapping` (object) with keys equivalent to the directory tree 
 
 ## Usage
 
-### `yimp.write(input, output, options)`
+### Command Line
+
+#### `yimp -i input -o output`
+
+If there is not `output` file, the contents will be written to the `stdout`. The list of `ext` (file extensions for directory imports, read more on [`yimp.write()`](#yimpwriteinput-output-options)) must be comma separated, without spaces or dots.
+
+```bash
+Options:
+  -i, --input   Path to input file
+  -o, --output  Path to output file
+  -e, --ext     Extension array (comma separated, optional)
+  --version     Show version number
+  --help        Show help
+```
+
+#### Example
+
+```bash
+yimp -i my-input-file.yml -o my-output-file.yml -e yml,yaml,raml
+```
+
+### Simple Programatic Usage
+
+#### `yimp.write(input, output, options)`
 
 Reads a *YAML* file and writes the output on a file.
 
@@ -89,10 +112,13 @@ Reads a *YAML* file and writes the output on a file.
 const yimp = require('yaml-import');
 const path = require('path');
 
-yimp.write(path.join(__dirname, 'myfiles/base.yml'), path.join(__dirname, 'out/yaml.yml'));
+yimp.write(
+    path.join(__dirname, 'myfiles/base.yml'),
+    path.join(__dirname, 'out/yaml.yml')
+);
 ```
 
-### `yimp.read(input, options)`
+#### `yimp.read(input, options)`
 
 Reads a *YAML* file and returns the parsed object.
 

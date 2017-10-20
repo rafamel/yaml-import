@@ -22,6 +22,15 @@ module.exports = {
         }],
         // Template strings inner spacing
         "template-curly-spacing": 0,
-        "operator-linebreak": [2, "before"]
+        "operator-linebreak": [2, "before"],
+        // Line length
+        "max-len": [2, {
+            "code": 90,
+            "ignoreUrls": true,
+            "ignoreComments": false,
+            "ignoreStrings": true,
+            "ignoreTemplateLiterals": true,
+            "ignoreRegExpLiterals": true
+        }]
     }
 };
