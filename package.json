@@ -1,6 +1,6 @@
 {
   "name": "yaml-import",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "author": "Rafa Mel",
   "description": "Import files and directories in YAML for a modular design",
   "homepage": "https://github.com/rafamel/yaml-import",
