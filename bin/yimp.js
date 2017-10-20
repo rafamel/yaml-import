@@ -27,17 +27,17 @@ const cleanPath = (x) => (x[0] === path.sep) ? x : path.join(process.cwd(), x);
         return yargs.showHelp();
     }
 
-    let ext;
+    let options = {};
     if (argv.e) {
-        ext = argv.e.split(',').map(x => `.${x}`);
+        options.ext = argv.e.split(',').map(x => `.${x}`);
     }
 
     const input = cleanPath(argv.i);
     if (!argv.o) {
-        process.stdout.write(yaml.dump(yimp.read(input)));
+        process.stdout.write(yaml.dump(yimp.read(input, options)));
         return;
     }
 
     const output = cleanPath(argv.o);
-    yimp.write(input, output, { ext });
+    yimp.write(input, output, options);
 })();

@@ -9,13 +9,13 @@
     "yimp": "bin/yimp.js"
   },
   "scripts": {
-    "lint": "eslint lib/*.js && eslint bin/*.js",
-    "lint:test": "eslint test/*.js",
+    "lint": "eslint lib/**/*.js && eslint bin/**/*.js",
+    "lint:test": "eslint test/**/*.js",
     "lint:md": "markdownlint *.md --config markdown.json",
-    "test": "npm run lint:test && jest ./test/*.js --runInBand --runTestsByPath --verbose",
+    "test": "npm run lint:test && jest ./test/.*.test.js --runInBand --verbose",
     "watch": "nodemon ./node_modules/.bin/run-s lint test",
-    "pre": "npm run prepublishOnly",
-    "prepublishOnly": "run-s lint lint:* && jest ./test/*.test.js --runTestsByPath",
+    "checks": "run-s lint lint:* && jest ./test/.*.test.js",
+    "prepublishOnly": "npm run checks",
     "update:packages": "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
   },
   "contributors": [
