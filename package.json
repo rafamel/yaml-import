@@ -9,12 +9,12 @@
     "yimp": "bin/yimp.js"
   },
   "scripts": {
-    "lint": "eslint lib/**/*.js && eslint bin/**/*.js",
-    "lint:test": "eslint test/**/*.js",
+    "lint": "eslint ./lib --ext .js && eslint ./bin --ext .js",
+    "lint:test": "eslint ./test --ext .js",
     "lint:md": "markdownlint *.md --config markdown.json",
     "test": "npm run lint:test && jest ./test/.*.test.js --runInBand --verbose",
     "watch": "nodemon ./node_modules/.bin/run-s lint test",
-    "checks": "run-s lint lint:* && jest ./test/.*.test.js",
+    "checks": "run-s lint lint:* && jest ./test/.*.test.js && npm outdated",
     "prepublishOnly": "npm run checks",
     "update:packages": "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
   },

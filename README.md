@@ -83,7 +83,7 @@ If there is not `output` file, the contents will be written to the `stdout`. The
 ```bash
 Options:
   -i, --input   Path to input file
-  -o, --output  Path to output file
+  -o, --output  Path to output file (optional)
   -e, --ext     Extension array (comma separated, optional)
   --version     Show version number
   --help        Show help
