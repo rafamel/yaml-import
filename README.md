@@ -20,7 +20,7 @@ With `yaml-import`, the imports are relative to the current *YAML* file.
 
 ### `!!import/single` *file*
 
-Import the contents of a single file
+Imports the contents of a single file
 
 ```yaml
 some:
@@ -35,7 +35,7 @@ or:
 
 ### `!!import/merge` *array*
 
-Merge the contents of numerous files into one object or array.
+Merges the contents of numerous files into one object or array.
 
 - If all the files are objects, it will merge all the keys into one single object.
 - If one or more of the files contain any other type, it will concatenate an array (so if any of the files is an array itself, all its elements will go into the top level).
@@ -50,7 +50,7 @@ Merge the contents of numerous files into one object or array.
 
 ### `!!import/dirMerge` *dir*
 
-Same as [`!!import/merge`](#importmerge-array), but with all the files (recursive) within a directory.
+Same as [`!!import/merge`](#importmerge-array), but with all the files (recursively) within a directory.
 
 ```yaml
 !!import/dirMerge myNice/dir
@@ -58,7 +58,7 @@ Same as [`!!import/merge`](#importmerge-array), but with all the files (recursiv
 
 ### `!!import/dirSeq` *dir*
 
-It will create a `sequence` (array), and the contents of each of the files found within the directory (recursive) will be an element of the array.
+It will create a `sequence` (array), and the contents of each of the files found within the directory (recursively) will be an element of the array.
 
 ```yaml
 !!import/dirSeq myNice/dir
@@ -66,7 +66,7 @@ It will create a `sequence` (array), and the contents of each of the files found
 
 ### `!!import/dirMap` *dir*
 
-It will create an `mapping` (object) with keys equivalent to the directory tree and files (nested).
+It will create a `mapping` (object) with keys equivalent to the directory tree and files (nested).
 
 ```yaml
 !!import/dirMap myNice/dir
@@ -78,7 +78,7 @@ It will create an `mapping` (object) with keys equivalent to the directory tree 
 
 #### `yimp -i input -o output`
 
-If there is not `output` file, the contents will be written to the `stdout`. The list of `ext` (file extensions for directory imports, read more on [`yimp.write()`](#yimpwriteinput-output-options)) must be comma separated, without spaces or dots.
+If there is not an `output` file, the contents will be written to `stdout`. The list of `ext` (file extensions for directory imports, read more on [`yimp.write()`](#yimpwriteinput-output-options)) must be comma separated, without spaces or dots.
 
 ```bash
 Options:
@@ -102,10 +102,10 @@ yimp -i my-input-file.yml -o my-output-file.yml -e yml,yaml,raml
 Reads a *YAML* file and writes the output on a file.
 
 - `input`: *String*, the path of the file to read.
-- `output`: *String*, the path to write the output file.
+- `output`: *String*, the path for the output file.
 - `options` (optional): *Object*
     - `ext`: *Array*, list of extensions to use for directory imports. By default, `['.yml', '.yaml']`.
-    - `safe`: *Boolean*, whether it should it `safeLoad` or `load` for [js-yaml](https://www.npmjs.com/package/js-yaml) when loading the *YAML* under the hood. `true` by default.
+    - `safe`: *Boolean*, whether it should use `safeLoad` or `load` when loading the *YAML* file via [js-yaml](https://www.npmjs.com/package/js-yaml). `true` by default.
     - [All others offered by js-yaml](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
 
 ```javascript
@@ -123,7 +123,7 @@ yimp.write(
 Reads a *YAML* file and returns the parsed object.
 
 - `input`: *String*, the path of the file to read.
-- `options` (optional): Same as for [`yimp.write()`](#yimpwriteinput-output-options).
+- `options` (optional): Same as [`yimp.write()`](#yimpwriteinput-output-options).
 
 ```javascript
 const yimp = require('yaml-import');
