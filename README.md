@@ -1,6 +1,6 @@
 # yaml-import
 
-[![Version](https://img.shields.io/github/package-json/v/rafamel/yaml-import.svg)](https://github.com/rafamel/yaml-import)
+[![Version](https://img.shields.io/npm/v/yaml-import.svg)](https://www.npmjs.com/package/yaml-import)
 [![Build Status](https://travis-ci.org/rafamel/yaml-import.svg)](https://travis-ci.org/rafamel/yaml-import)
 [![Coverage](https://img.shields.io/coveralls/rafamel/yaml-import.svg)](https://coveralls.io/github/rafamel/yaml-import)
 [![Dependencies](https://david-dm.org/rafamel/yaml-import/status.svg)](https://david-dm.org/rafamel/yaml-import)
@@ -24,13 +24,13 @@ Imports the contents of a single file
 
 ```yaml
 some:
-    - yaml
-    - where I
+  - yaml
+  - where I
 import: a file like
 here: !!import/single mydir/myfile.yml
 or:
-    - like below
-    - !!import/single myotherdir/myotherfile.yml
+  - like below
+  - !!import/single myotherdir/myotherfile.yml
 ```
 
 ### `!!import/merge` *array*
@@ -42,9 +42,9 @@ Merges the contents of numerous files into one object or array.
 
 ```yaml
 !!import/merge [
-    'mydir/file-one.yml',
-    'mydir/file-two.yml',
-    'myotherdir/file-three.yml',
+  'mydir/file-one.yml',
+  'mydir/file-two.yml',
+  'myotherdir/file-three.yml',
 ]
 ```
 
@@ -104,17 +104,17 @@ Reads a *YAML* file and writes the output on a file.
 - `input`: *String*, the path of the file to read.
 - `output`: *String*, the path for the output file.
 - `options` (optional): *Object*
-    - `ext`: *Array*, list of extensions to use for directory imports. By default, `['.yml', '.yaml']`.
-    - `safe`: *Boolean*, whether it should use `safeLoad` or `load` when loading the *YAML* file via [js-yaml](https://www.npmjs.com/package/js-yaml). `true` by default.
-    - [All others offered by js-yaml](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
+  - `ext`: *Array*, list of extensions to use for directory imports. By default, `['.yml', '.yaml']`.
+  - `safe`: *Boolean*, whether it should use `safeLoad` or `load` when loading the *YAML* file via [js-yaml](https://www.npmjs.com/package/js-yaml). `true` by default.
+  - [All others offered by js-yaml](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
 
 ```javascript
-const yimp = require('yaml-import');
-const path = require('path');
+import path from 'path';
+import * as yimp from 'yaml-import';
 
 yimp.write(
-    path.join(__dirname, 'myfiles/base.yml'),
-    path.join(__dirname, 'out/yaml.yml')
+  path.join(__dirname, 'myfiles/base.yml'),
+  path.join(__dirname, 'out/yaml.yml')
 );
 ```
 
@@ -126,14 +126,18 @@ Reads a *YAML* file and returns the parsed object.
 - `options` (optional): Same as [`yimp.write()`](#yimpwriteinput-output-options).
 
 ```javascript
-const yimp = require('yaml-import');
-const path = require('path');
+import path from 'path';
+import * as yimp from 'yaml-import';
 
 const myYmlObj = yimp.read(path.join(__dirname, 'myfiles/base.yml'));
+```
 
-// We could write it later on with js-yaml and fs
-const yaml = require('js-yaml');
-const fs = require('fs');
+We could write it later on with js-yaml and fs:
+
+```javascript
+import yaml from 'js-yaml';
+import fs from 'fs';
+
 // To YAML
 const myYml = yaml.dump(myYmlObj);
 // Write to file
@@ -150,10 +154,10 @@ You can use `yaml-import` to return a `schema` and pair it with [js-yaml](https:
 - `options` (optional): Same as for [`yimp.write()`](#yimpwriteinput-output-options). Used when files to import are loaded.
 
 ```javascript
-const yaml = require('js-yaml');
-const yimp = require('yaml-import');
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
+import yaml from 'js-yaml';
+import * as yimp from 'yaml-import';
 
 const src = fs.readFileSync(path.join(__dirname, 'myfiles/base.yml'), 'utf8');
 const dir = path.join(__dirname, 'myfiles')

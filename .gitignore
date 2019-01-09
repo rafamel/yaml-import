@@ -1,13 +1,22 @@
 # Project Specific #
 ####################
+/docs
 
 # Node, Frameworks, Editors #
 #############################
 _test.js
+_test.ts
+build
+dist
+.cache
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 coverage
 node_modules
 npm-debug.log
-config.env
 
 # Compiled source #
 ###################

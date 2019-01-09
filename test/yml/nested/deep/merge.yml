@@ -1,4 +1,4 @@
 !!import/merge [
-    ../../simples/seq/1.yml,
-    ../../simples/seq/2.yml
+  ../../simples/seq/1.yml,
+  ../../simples/seq/2.yml
 ]

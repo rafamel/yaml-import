@@ -3,31 +3,6 @@
   "version": "0.2.3",
   "author": "Rafa Mel",
   "description": "Import files and directories in YAML for a modular design",
-  "homepage": "https://github.com/rafamel/yaml-import",
-  "main": "./lib/index",
-  "bin": {
-    "yimp": "bin/yimp.js"
-  },
-  "scripts": {
-    "lint": "eslint ./lib --ext .js && eslint ./bin --ext .js",
-    "lint:test": "eslint ./test --ext .js",
-    "lint:md": "markdownlint *.md --config markdown.json",
-    "test": "npm run lint:test && jest ./test/.*.test.js --runInBand --verbose",
-    "watch": "nodemon ./node_modules/.bin/run-s lint test",
-    "checks": "run-s lint lint:* && jest ./test/.*.test.js",
-    "prepublishOnly": "npm run checks",
-    "update:packages": "rm -rf node_modules && rm package-lock.json && npm update --save/save-dev && npm install && npm outdated"
-  },
-  "contributors": [
-    {
-      "name": "Rafa Mel"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/rafamel/yaml-import"
-  },
-  "license": "MIT",
   "keywords": [
     "yaml",
     "include",
@@ -35,41 +10,93 @@
     "require",
     "js-yaml"
   ],
-  "bugs": {
-    "url": "https://github.com/rafamel/yaml-import/issues"
+  "bin": {
+    "yimp": "bin/yimp.js"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/rafamel/yaml-import/raw/master/LICENSE"
-    }
-  ],
-  "dependencies": {
-    "fs-readdir-recursive": "^1.0.0",
-    "js-yaml": "^3.10.0",
-    "namify": "^0.1.3",
-    "yargs": "^10.0.3"
+  "scripts": {
+    "prepublishOnly": "exit 1",
+    "start": "npm run watch",
+    "build": "nps build",
+    "publish": "nps publish",
+    "watch": "nps watch",
+    "fix": "nps fix",
+    "types": "nps types",
+    "lint": "nps lint",
+    "lint:md": "nps lint.md",
+    "lint:scripts": "nps lint.scripts",
+    "test": "nps test",
+    "test:watch": "nps test.watch",
+    "validate": "nps validate",
+    "update": "nps update",
+    "clean": "nps clean",
+    "docs": "nps docs",
+    "nps": "nps",
+    "jake": "jake"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rafamel/-moduleName-",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafamel/-moduleName-"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/-moduleName-/issues"
   },
   "devDependencies": {
-    "@types/jest": "^22.0.1",
-    "coveralls": "^3.0.0",
-    "eslint": "^4.11.0",
-    "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jest": "^21.3.2",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "jest-cli": "^22.0.4",
-    "markdownlint-cli": "^0.6.0",
-    "nodemon": "^1.12.1",
-    "npm-run-all": "^4.1.1"
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.2.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/fs-readdir-recursive": "^1.0.0",
+    "@types/jest": "^23.3.9",
+    "@types/js-yaml": "^3.11.4",
+    "@types/yargs": "^12.0.5",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.4.2",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "concurrently": "^4.1.0",
+    "coveralls": "^3.0.2",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.9.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-import-resolver-babel-module": "^5.0.0-beta.1",
+    "eslint-import-resolver-typescript": "^1.1.1",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^22.0.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-restricted-globals": "^0.2.0",
+    "husky": "^1.2.1",
+    "jake": "^8.0.19",
+    "jest-cli": "^23.6.0",
+    "markdownlint-cli": "^0.13.0",
+    "nps": "^5.9.3",
+    "onchange": "^5.2.0",
+    "prettier": "^1.15.2",
+    "shx": "^0.3.2",
+    "tslint": "^5.12.0",
+    "tslint-config-prettier": "^1.17.0",
+    "typedoc": "^0.13.0",
+    "typedoc-plugin-external-module-name": "^1.1.3",
+    "typescript": "^3.2.1"
   },
-  "engines": {
-    "node": ">=8.0.0"
+  "dependencies": {
+    "fs-readdir-recursive": "^1.1.0",
+    "js-yaml": "^3.12.1",
+    "namify": "^0.1.3",
+    "yargs": "^12.0.5"
   },
-  "jest": {
-    "testEnvironment": "node",
-    "collectCoverage": true
+  "husky": {
+    "hooks": {
+      "pre-commit": "cross-env MSG=\"Committing in:\" nps validate"
+    }
   }
 }
