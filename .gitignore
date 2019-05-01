@@ -1,13 +1,15 @@
 # Project Specific #
 ####################
-/docs
+/pkg
+/build
+/lib
+/bin
+/dist
+/out
+_test*
 
 # Node, Frameworks, Editors #
 #############################
-_test.js
-_test.ts
-build
-dist
 .cache
 .env
 .env.local
@@ -45,6 +47,7 @@ npm-debug.log
 *.log
 *.sql
 *.sqlite
+*.db
 
 # OS generated files #
 ######################

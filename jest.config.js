@@ -1,18 +1,19 @@
-const { EXTENSIONS } = require('./project.config');
-const EXT_ARR = EXTENSIONS.split(',');
+const project = require('./project.config');
+const EXT =
+  project.get('typescript') && project.get('ext.ts')
+    ? project.get('ext.js') + ',' + project.get('ext.ts')
+    : project.get('ext.js');
+const EXT_ARR = EXT.split(',');
 
 module.exports = {
   testEnvironment: 'node',
   collectCoverage: true,
-  collectCoverageFrom: [`<rootDir>/src/**/*.{${EXTENSIONS}}`],
-  modulePathIgnorePatterns: ['<rootDir>/build', '<rootDir>/src/bin'],
-  moduleFileExtensions: EXT_ARR.concat(['json']),
-  testMatch: [
-    `**/__tests__/**/*.{${EXTENSIONS}}`,
-    `**/?(*.)+(spec|test).{${EXTENSIONS}}`
+  collectCoverageFrom: [`<rootDir>/src/**/*.{${EXT}}`],
+  modulePathIgnorePatterns: [
+    '<rootDir>/pkg',
+    '<rootDir>/src/@types',
+    '<rootDir>/src/.*/__mocks__'
   ],
-  testPathIgnorePatterns: ['/node_modules/'],
-  transform: {
-    [`^.+\\.(${EXT_ARR.join('|')})$`]: 'babel-jest'
-  }
+  moduleFileExtensions: EXT_ARR.concat(['json']),
+  testPathIgnorePatterns: ['/node_modules/']
 };

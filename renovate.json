@@ -1,0 +1,36 @@
+{
+  "extends": [
+    "config:base",
+    "docker:disable",
+    ":automergeRequireAllStatusChecks",
+    ":prHourlyLimitNone",
+    ":prConcurrentLimit10",
+    ":separateMajorReleases",
+    ":combinePatchMinorReleases"
+  ],
+  "ignoreDeps": ["typescript", "husky"],
+  "packageRules": [
+    {
+      "packagePatterns": ["*"],
+      "rangeStrategy": "replace",
+      "semanticCommitType": "fix",
+      "extends": ["schedule:weekly"],
+      "minor": {
+        "extends": ["schedule:monthly"],
+        "groupName": "all non-major dependencies",
+        "groupSlug": "all-minor-patch"
+      }
+    },
+    {
+      "depTypeList": ["devDependencies"],
+      "rangeStrategy": "replace",
+      "semanticCommitType": "chore",
+      "commitMessageSuffix": "(development)",
+      "schedule": "before 3am on the first day of the year",
+      "minor": {
+        "groupName": "all non-major dependencies",
+        "groupSlug": "all-dev-minor-patch"
+      }
+    }
+  ]
+}
