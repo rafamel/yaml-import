@@ -5,7 +5,11 @@ import namify from 'namify';
 import { IOpts } from './types';
 import read from './read';
 
-export default function getSchema(dir: string, options: IOpts = {}) {
+export default function getSchema(
+  dir: string,
+  options: IOpts = {},
+  schemas: yaml.Schema[] = [yaml.DEFAULT_SAFE_SCHEMA]
+) {
   if (!options.hasOwnProperty('ext') || !Array.isArray(options.ext)) {
     options.ext = ['.yml', '.yaml'];
   }
@@ -110,6 +114,6 @@ export default function getSchema(dir: string, options: IOpts = {}) {
       }
     })
   ];
-  const schema = yaml.Schema.create(types);
+  const schema = yaml.Schema.create(schemas, types);
   return schema;
 }
