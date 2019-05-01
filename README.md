@@ -1,14 +1,16 @@
 # yaml-import
 
 [![Version](https://img.shields.io/npm/v/yaml-import.svg)](https://www.npmjs.com/package/yaml-import)
-[![Build Status](https://travis-ci.org/rafamel/yaml-import.svg)](https://travis-ci.org/rafamel/yaml-import)
+[![Build Status](https://img.shields.io/travis/rafamel/yaml-import.svg)](https://travis-ci.org/rafamel/yaml-import)
 [![Coverage](https://img.shields.io/coveralls/rafamel/yaml-import.svg)](https://coveralls.io/github/rafamel/yaml-import)
-[![Dependencies](https://david-dm.org/rafamel/yaml-import/status.svg)](https://david-dm.org/rafamel/yaml-import)
-[![Vulnerabilities](https://snyk.io/test/npm/yaml-import/badge.svg)](https://snyk.io/test/npm/yaml-import)
-[![Issues](https://img.shields.io/github/issues/rafamel/yaml-import.svg)](https://github.com/rafamel/yaml-import/issues)
+[![Dependencies](https://img.shields.io/david/rafamel/yaml-import.svg)](https://david-dm.org/rafamel/yaml-import)
+[![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/yaml-import.svg)](https://snyk.io/test/npm/yaml-import)
 [![License](https://img.shields.io/github/license/rafamel/yaml-import.svg)](https://github.com/rafamel/yaml-import/blob/master/LICENSE)
+[![Types](https://img.shields.io/npm/types/yaml-import.svg)](https://www.npmjs.com/package/yaml-import)
 
-**Import files and directories in *YAML* for a modular design.**
+> Import files and directories in *YAML* for a modular design
+
+If you find it useful, consider [starring the project](https://github.com/rafamel/yaml-import) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way!
 
 ## Install
 

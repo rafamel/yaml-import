@@ -1,7 +1,9 @@
-lib
-build
-dist
-out
+/pkg
+/build
+/lib
+/bin
+/dist
+/out
 .vscode
 .cache
 coverage
