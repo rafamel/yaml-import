@@ -20,7 +20,7 @@ export default function getSchema(
   };
   const filesMergeConstruct = (data: string[]): any => {
     let ans: any;
-    const arr = data.map((x) => read(path.join(dir, x), opts));
+    const arr = data.map((x) => read(path.join(dir, x), opts, schemas));
     const notAllObjs: boolean = arr.reduce((acc: boolean, x) => {
       return acc || typeof x !== 'object' || Array.isArray(x);
     }, false);
@@ -46,7 +46,7 @@ export default function getSchema(
         return typeof data === 'string';
       },
       construct(data) {
-        return read(path.join(dir, data), opts);
+        return read(path.join(dir, data), opts, schemas);
       }
     }),
     new yaml.Type('tag:yaml.org,2002:import/merge', {
@@ -76,7 +76,7 @@ export default function getSchema(
       construct(data) {
         const obj: any = {};
         dirFiles(data).forEach((x) => {
-          const content = read(path.join(dir, data, x), opts);
+          const content = read(path.join(dir, data, x), opts, schemas);
           // Get keys
           let keys = x.split(path.sep);
           keys[keys.length - 1] = path.basename(
@@ -106,7 +106,7 @@ export default function getSchema(
       construct(data) {
         const arr: any[] = [];
         dirFiles(data).forEach((x) => {
-          const content = read(path.join(dir, data, x), opts);
+          const content = read(path.join(dir, data, x), opts, schemas);
           arr.push(content);
         });
         return arr;
