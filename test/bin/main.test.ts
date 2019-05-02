@@ -40,7 +40,10 @@ test(`Shows help`, async () => {
       -o, --output <path>       Path to output file, optional
       -e, --ext <extensions>    Extensions, comma separated, optional
       -h, --help                Show help
-      -v, --version             Show version number",
+      -v, --version             Show version number
+    
+    Example:
+      $ yimp -i input-file.yml -o output-file.yml -e yml,yaml,raml",
     ]
   `);
 });
