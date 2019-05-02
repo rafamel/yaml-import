@@ -9,17 +9,17 @@ export default function getSchema(
   dir: string,
   options: IOpts = {},
   schemas: yaml.Schema[] = [yaml.DEFAULT_SAFE_SCHEMA]
-) {
+): yaml.Schema {
   if (!options.hasOwnProperty('ext') || !Array.isArray(options.ext)) {
     options.ext = ['.yml', '.yaml'];
   }
-  const dirFiles = (data: string) => {
+  const dirFiles = (data: string): string[] => {
     return recursivedir(path.join(dir, data)).filter((x) => {
       const ext = path.extname(x);
       return !options.ext || options.ext.indexOf(ext) !== -1;
     });
   };
-  const filesMergeConstruct = (data: string[]) => {
+  const filesMergeConstruct = (data: string[]): any => {
     let ans: any;
     const arr = data.map((x) => read(path.join(dir, x), options));
     const notAllObjs: boolean = arr.reduce((acc: boolean, x) => {

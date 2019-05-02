@@ -4,7 +4,7 @@ import yaml from 'js-yaml';
 import getSchema from './get-schema';
 import { IOpts } from './types';
 
-export default function read(input: string, options: IOpts = {}) {
+export default function read(input: string, options: IOpts = {}): any {
   const dir = path.dirname(input);
   const src = fs.readFileSync(input, 'utf8');
 
