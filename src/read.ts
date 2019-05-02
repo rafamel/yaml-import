@@ -4,17 +4,18 @@ import yaml from 'js-yaml';
 import getSchema from './get-schema';
 import { IOptions } from './types';
 
-export default function read(input: string, options: IOptions = {}): any {
+export default function read(input: string, options?: IOptions): any {
   const dir = path.dirname(input);
   const src = fs.readFileSync(input, 'utf8');
 
-  options.schema = getSchema(dir, options);
-  if (!options.hasOwnProperty('filename')) {
-    options.filename = input;
-  }
-  if (!options.hasOwnProperty('safe')) {
-    options.safe = true;
-  }
+  const opts = Object.assign(
+    {
+      filename: input,
+      safe: true
+    },
+    options,
+    { schema: getSchema(dir, options) }
+  );
 
-  return options.safe ? yaml.safeLoad(src, options) : yaml.load(src, options);
+  return opts.safe ? yaml.safeLoad(src, opts) : yaml.load(src, opts);
 }

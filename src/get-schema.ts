@@ -7,21 +7,20 @@ import read from './read';
 
 export default function getSchema(
   dir: string,
-  options: IOptions = {},
+  options?: IOptions | null,
   schemas: yaml.Schema[] = [yaml.DEFAULT_SAFE_SCHEMA]
 ): yaml.Schema {
-  if (!options.hasOwnProperty('ext') || !Array.isArray(options.ext)) {
-    options.ext = ['.yml', '.yaml'];
-  }
+  const opts = Object.assign({ ext: ['.yml', '.yaml'] }, options);
+
   const dirFiles = (data: string): string[] => {
     return recursivedir(path.join(dir, data)).filter((x) => {
       const ext = path.extname(x);
-      return !options.ext || options.ext.indexOf(ext) !== -1;
+      return !opts.ext || opts.ext.indexOf(ext) !== -1;
     });
   };
   const filesMergeConstruct = (data: string[]): any => {
     let ans: any;
-    const arr = data.map((x) => read(path.join(dir, x), options));
+    const arr = data.map((x) => read(path.join(dir, x), opts));
     const notAllObjs: boolean = arr.reduce((acc: boolean, x) => {
       return acc || typeof x !== 'object' || Array.isArray(x);
     }, false);
@@ -47,7 +46,7 @@ export default function getSchema(
         return typeof data === 'string';
       },
       construct(data) {
-        return read(path.join(dir, data), options);
+        return read(path.join(dir, data), opts);
       }
     }),
     new yaml.Type('tag:yaml.org,2002:import/merge', {
@@ -77,7 +76,7 @@ export default function getSchema(
       construct(data) {
         const obj: any = {};
         dirFiles(data).forEach((x) => {
-          const content = read(path.join(dir, data, x), options);
+          const content = read(path.join(dir, data, x), opts);
           // Get keys
           let keys = x.split(path.sep);
           keys[keys.length - 1] = path.basename(
@@ -107,7 +106,7 @@ export default function getSchema(
       construct(data) {
         const arr: any[] = [];
         dirFiles(data).forEach((x) => {
-          const content = read(path.join(dir, data, x), options);
+          const content = read(path.join(dir, data, x), opts);
           arr.push(content);
         });
         return arr;

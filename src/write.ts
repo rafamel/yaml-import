@@ -6,7 +6,7 @@ import { IOptions } from './types';
 export default function write(
   input: string,
   output: string,
-  options: IOptions
+  options?: IOptions
 ): void {
   fs.writeFileSync(output, yaml.dump(read(input, options)));
 }
