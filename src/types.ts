@@ -10,3 +10,14 @@ export interface IOptions extends LoadOptions {
    */
   safe?: boolean;
 }
+
+export interface IPayload {
+  paths: string[];
+  data?: any;
+}
+
+export interface IFileDefinition {
+  cwd: string;
+  dir: string;
+  file: string;
+}
