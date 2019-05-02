@@ -4,7 +4,8 @@ import { loadPackage, flags, safePairs } from 'cli-belt';
 import { stripIndent as indent } from 'common-tags';
 import arg from 'arg';
 import yaml from 'js-yaml';
-import * as yimp from '../index';
+import read from '../read';
+import write from '../write';
 
 export default async function main(argv: string[]): Promise<void> {
   const pkg = await loadPackage(__dirname, { title: true });
@@ -64,8 +65,8 @@ export default async function main(argv: string[]): Promise<void> {
     : {};
 
   if (!output) {
-    console.log(yaml.dump(yimp.read(input, options)).trim());
+    console.log(yaml.dump(read(input, options)).trim());
   } else {
-    yimp.write(input, output, options);
+    write(input, output, options);
   }
 }
