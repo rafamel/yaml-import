@@ -96,7 +96,7 @@
     "eslint-restricted-globals": "^0.2.0",
     "husky": "1.3.0",
     "jest-cli": "^24.7.1",
-    "kpo": "0.0.1",
+    "kpo": "0.0.4",
     "markdownlint-cli": "^0.15.0",
     "onchange": "^5.2.0",
     "prettier": "^1.17.0",
