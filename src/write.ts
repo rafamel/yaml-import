@@ -6,7 +6,8 @@ import { IOptions } from './types';
 export default function write(
   input: string,
   output: string,
-  options?: IOptions
+  options?: IOptions | null,
+  schemas?: yaml.Schema[]
 ): void {
-  fs.writeFileSync(output, yaml.dump(read(input, options)));
+  fs.writeFileSync(output, yaml.dump(read(input, options, schemas)));
 }
