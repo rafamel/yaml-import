@@ -1,12 +1,12 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
 import read from './read';
-import { IOpts } from './types';
+import { IOptions } from './types';
 
 export default function write(
   input: string,
   output: string,
-  options: IOpts
+  options: IOptions
 ): void {
   fs.writeFileSync(output, yaml.dump(read(input, options)));
 }

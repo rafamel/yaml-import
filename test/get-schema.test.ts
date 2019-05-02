@@ -2,12 +2,12 @@ import yaml from 'js-yaml';
 import path from 'path';
 import fs from 'fs';
 import getSchema from '~/get-schema';
-import { IOpts } from '~/types';
+import { IOptions } from '~/types';
 
 const content = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'yml/content.json'), 'utf8')
 );
-function read(src: string, options: IOpts = {}): any {
+function read(src: string, options: IOptions = {}): any {
   options.schema = getSchema(path.join(__dirname, 'yml'), options);
   return yaml.safeLoad(src, options);
 }

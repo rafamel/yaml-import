@@ -2,12 +2,12 @@ import yaml from 'js-yaml';
 import path from 'path';
 import recursivedir from 'fs-readdir-recursive';
 import namify from 'namify';
-import { IOpts } from './types';
+import { IOptions } from './types';
 import read from './read';
 
 export default function getSchema(
   dir: string,
-  options: IOpts = {},
+  options: IOptions = {},
   schemas: yaml.Schema[] = [yaml.DEFAULT_SAFE_SCHEMA]
 ): yaml.Schema {
   if (!options.hasOwnProperty('ext') || !Array.isArray(options.ext)) {
