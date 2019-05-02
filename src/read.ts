@@ -12,14 +12,11 @@ export default function read(
   const dir = path.dirname(input);
   const src = fs.readFileSync(input, 'utf8');
 
-  const opts = Object.assign(
-    {
-      filename: input,
-      safe: true
-    },
-    options,
-    { schema: getSchema(dir, options, schemas) }
-  );
+  const opts = Object.assign({ safe: true }, options);
 
-  return opts.safe ? yaml.safeLoad(src, opts) : yaml.load(src, opts);
+  return yaml[opts.safe ? 'safeLoad' : 'load'](src, {
+    ...opts,
+    filename: input,
+    schema: getSchema(dir, opts, schemas)
+  });
 }
