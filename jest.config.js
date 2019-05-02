@@ -12,7 +12,8 @@ module.exports = {
   modulePathIgnorePatterns: [
     '<rootDir>/pkg',
     '<rootDir>/src/@types',
-    '<rootDir>/src/.*/__mocks__'
+    '<rootDir>/src/.*/__mocks__',
+    '<rootDir>/src/bin/yimp.ts'
   ],
   moduleFileExtensions: EXT_ARR.concat(['json']),
   testPathIgnorePatterns: ['/node_modules/']
