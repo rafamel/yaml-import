@@ -1,8 +1,8 @@
 # yaml-import
 
 [![Version](https://img.shields.io/npm/v/yaml-import.svg)](https://www.npmjs.com/package/yaml-import)
-[![Build Status](https://img.shields.io/travis/rafamel/yaml-import.svg)](https://travis-ci.org/rafamel/yaml-import)
-[![Coverage](https://img.shields.io/coveralls/rafamel/yaml-import.svg)](https://coveralls.io/github/rafamel/yaml-import)
+[![Build Status](https://img.shields.io/travis/rafamel/yaml-import/master.svg)](https://travis-ci.org/rafamel/yaml-import)
+[![Coverage](https://img.shields.io/coveralls/rafamel/yaml-import/master.svg)](https://coveralls.io/github/rafamel/yaml-import)
 [![Dependencies](https://img.shields.io/david/rafamel/yaml-import.svg)](https://david-dm.org/rafamel/yaml-import)
 [![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/yaml-import.svg)](https://snyk.io/test/npm/yaml-import)
 [![License](https://img.shields.io/github/license/rafamel/yaml-import.svg)](https://github.com/rafamel/yaml-import/blob/master/LICENSE)
@@ -52,7 +52,7 @@ Merges the contents of numerous files into one object or array.
 
 ### `!!import/dirMerge` *dir*
 
-Same as [`!!import/merge`](#importmerge-array), but with all the files (recursively) within a directory.
+Same as [`!!import/merge`](#importmerge-array), but with all files (recursively) within a directory.
 
 ```yaml
 !!import/dirMerge myNice/dir
@@ -60,7 +60,7 @@ Same as [`!!import/merge`](#importmerge-array), but with all the files (recursiv
 
 ### `!!import/dirSeq` *dir*
 
-It will create a `sequence` (array), and the contents of each of the files found within the directory (recursively) will be an element of the array.
+Creates a `sequence` (array), and the contents of each of the files found within the directory (recursively) will be an element of the array.
 
 ```yaml
 !!import/dirSeq myNice/dir
@@ -68,7 +68,7 @@ It will create a `sequence` (array), and the contents of each of the files found
 
 ### `!!import/dirMap` *dir*
 
-It will create a `mapping` (object) with keys equivalent to the directory tree and files (nested).
+Creates a `mapping` (object) with keys equivalent to the directory tree and files (nested).
 
 ```yaml
 !!import/dirMap myNice/dir
@@ -78,63 +78,63 @@ It will create a `mapping` (object) with keys equivalent to the directory tree a
 
 ### Command Line
 
-#### `yimp -i input -o output`
-
-If there is not an `output` file, the contents will be written to `stdout`. The list of `ext` (file extensions for directory imports, read more on [`yimp.write()`](#yimpwriteinput-output-options)) must be comma separated, without spaces or dots.
+If there is no `output` file, the contents will be written to `stdout`. The list of `ext` -file extensions for directory imports, see [`write`](#writeinput-output-options-schemas)- must be comma separated, without spaces or dots.
 
 ```bash
+Usage:
+  $ yimp [options]
+
 Options:
-  -i, --input   Path to input file
-  -o, --output  Path to output file (optional)
-  -e, --ext     Extension array (comma separated, optional)
-  --version     Show version number
-  --help        Show help
+  -i, --input <path>        Path to input file
+  -o, --output <path>       Path to output file, optional
+  -e, --ext <extensions>    Extensions, comma separated, optional
+  -h, --help                Show help
+  -v, --version             Show version number
+
+Example:
+  $ yimp -i input-file.yml -o output-file.yml -e yml,yaml,raml
 ```
 
-#### Example
+### Programatic Usage
 
-```bash
-yimp -i my-input-file.yml -o my-output-file.yml -e yml,yaml,raml
-```
-
-### Simple Programatic Usage
-
-#### `yimp.write(input, output, options)`
+#### `write(input, output, options?, schemas?)`
 
 Reads a *YAML* file and writes the output on a file.
 
 - `input`: *String*, the path of the file to read.
 - `output`: *String*, the path for the output file.
-- `options` (optional): *Object*
+- `options` *Object, optional:*
   - `ext`: *Array*, list of extensions to use for directory imports. By default, `['.yml', '.yaml']`.
-  - `safe`: *Boolean*, whether it should use `safeLoad` or `load` when loading the *YAML* file via [js-yaml](https://www.npmjs.com/package/js-yaml). `true` by default.
-  - [All others offered by js-yaml](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
+  - `safe`: *Boolean*, whether it should use `safeLoad` or `load` when loading the *YAML* file via [*js-yaml*](https://www.npmjs.com/package/js-yaml). `true` by default.
+  - [All others taken by *js-yaml*](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
+- `schemas`: *Array, optional,* yaml schemas to extend.
 
 ```javascript
 import path from 'path';
-import * as yimp from 'yaml-import';
+import { write } from 'yaml-import';
 
-yimp.write(
+write(
   path.join(__dirname, 'myfiles/base.yml'),
   path.join(__dirname, 'out/yaml.yml')
 );
 ```
 
-#### `yimp.read(input, options)`
+#### `read(input, options?, schemas?)`
 
 Reads a *YAML* file and returns the parsed object.
 
 - `input`: *String*, the path of the file to read.
-- `options` (optional): Same as [`yimp.write()`](#yimpwriteinput-output-options).
+- `options`: *Object, optional,* same as those taken by [`write`](#writeinput-output-options-schemas).
+- `schemas`: *Array, optional,* yaml schemas to extend.
 
 ```javascript
 import path from 'path';
-import * as yimp from 'yaml-import';
+import { read } from 'yaml-import';
 
-const myYmlObj = yimp.read(path.join(__dirname, 'myfiles/base.yml'));
+const myYmlObj = read(path.join(__dirname, 'myfiles/base.yml'));
 ```
 
-We could write it later on with js-yaml and fs:
+We could write it later on with `js-yaml` and `fs`:
 
 ```javascript
 import yaml from 'js-yaml';
@@ -146,23 +146,22 @@ const myYml = yaml.dump(myYmlObj);
 fs.writeFileSync(path.join(__dirname, 'output.yml'), myYml);
 ```
 
-### Flexible Usage with `js-yaml`
+### `getSchema(directory, options?, schemas?)`
 
-You can use `yaml-import` to return a `schema` and pair it with [js-yaml](https://www.npmjs.com/package/js-yaml) for a more flexible usage on use cases not contemplated by the previous api.
+For flexible usage with *js-yaml,* `getSchema` returns a `schema` you can pass to [*js-yaml*](https://www.npmjs.com/package/js-yaml) functions.
 
-#### `yimp.getSchema(dir, options)`
-
-- `dir`: *String*, the base directory to read the imported files from.
-- `options` (optional): Same as for [`yimp.write()`](#yimpwriteinput-output-options). Used when files to import are loaded.
+- `directory`: *String*, the base directory to read the imported files from.
+- `options`: *Object, optional,* same as those taken by [`write`](#writeinput-output-options-schemas). Used when files to import are loaded.
+- `schemas`: *Array, optional,* yaml schemas to extend.
 
 ```javascript
 import path from 'path';
 import fs from 'fs';
 import yaml from 'js-yaml';
-import * as yimp from 'yaml-import';
+import { getSchema } from 'yaml-import';
 
 const src = fs.readFileSync(path.join(__dirname, 'myfiles/base.yml'), 'utf8');
-const dir = path.join(__dirname, 'myfiles')
-const schema = yimp.getSchema(dir);
+const dir = path.join(__dirname, 'myfiles');
+const schema = getSchema(dir);
 const myYml = yaml.safeLoad(src, { schema: schema });
 ```
