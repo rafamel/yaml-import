@@ -76,7 +76,7 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "commitizen": "^3.1.1",
     "conventional-changelog-cli": "^2.0.17",
-    "conventional-recommended-bump": "^4.1.1",
+    "conventional-recommended-bump": "^5.0.0",
     "coveralls": "^3.0.3",
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^5.16.0",
