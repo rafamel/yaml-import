@@ -4,7 +4,7 @@ import { IOptions } from '~/types';
 import read from '~/read';
 import merge from './merge';
 import getFiles from './get-files';
-import createMapping from './create-mapping';
+import createTree from './create-tree';
 
 export default function getSchema(
   directory: string,
@@ -47,7 +47,7 @@ export default function getSchema(
         return typeof data === 'string';
       },
       construct(dir) {
-        return createMapping(dir, directory, opts, schemas);
+        return createTree(dir, directory, opts, schemas);
       }
     }),
     new yaml.Type('tag:yaml.org,2002:import/dirSeq', {

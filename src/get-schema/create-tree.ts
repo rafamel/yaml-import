@@ -5,14 +5,15 @@ import getFiles from './get-files';
 import read from '~/read';
 import { IOptions } from '~/types';
 
-export default function createMapping(
+export default function createTree(
   file: string,
   directory: string,
   options: IOptions,
-  schemas: yaml.Schema[]
+  schemas: yaml.Schema[],
+  recursive?: boolean
 ): any {
   const obj: any = {};
-  getFiles([file], directory, options).forEach((item) => {
+  getFiles([file], directory, options, recursive).forEach((item) => {
     const content = read(
       path.join(directory, item.dir, item.file),
       options,
