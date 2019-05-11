@@ -1,0 +1,53 @@
+foo: bar
+files:
+  scalar: !!import/merge
+    - ./foo/a.yml
+    - ./scalar/string.yml
+  sequence: !!import/sequence
+    - ./foo/a.yml
+    - ./foo/b.yml
+  shallow: !!import/shallow
+    - ./foo/a.yml
+    - ./foo/b.yml
+  merge: !!import/merge
+    - ./foo/a.yml
+    - ./foo/b.yml
+  deep: !!import/deep
+    - ./foo/a.yml
+    - ./foo/b.yml
+directories:
+  sequence: !!import/sequence [./foo]
+  shallow: !!import/shallow [./foo]
+  merge: !!import/merge [./foo]
+  deep: !!import/deep [./foo]
+payload:
+  plain: !!import/payload
+    paths:
+      - ./foo/a.yml
+      - ./foo/b.yml
+    data:
+      bar:
+        baz: !!import/single ./scalar/num.yml
+  recursive: !!import/payload
+    recursive: true
+    strategy: sequence
+    paths: ./foo
+    data:
+      last: foo
+trees:
+  plain: !!import/tree
+    paths: ./foo
+  recursive: !!import/tree
+    paths: ./foo
+    recursive: true
+  multiple: !!import/tree
+    strategy: 'deep'
+    paths:
+      - ./foo/bar
+      - ./foo/baz
+    data:
+      a:
+        baz: !!import/single ./scalar/num.yml
+  
+  
+

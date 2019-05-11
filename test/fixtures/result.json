@@ -1,0 +1,224 @@
+{
+  "foo": "bar",
+  "files": {
+    "scalar": "foo",
+    "sequence": [
+      {
+        "foo": "bar",
+        "bar": {
+          "foo": "bar",
+          "bar": "baz",
+          "baz": [5, "foo", "bar", "baz"]
+        }
+      },
+      {
+        "foo": "bar",
+        "bar": {
+          "baz": ["bar", "baz"],
+          "foobar": ["barbaz"]
+        }
+      }
+    ],
+    "shallow": {
+      "bar": {
+        "baz": ["bar", "baz"],
+        "foobar": ["barbaz"]
+      },
+      "foo": "bar"
+    },
+    "merge": {
+      "bar": {
+        "bar": "baz",
+        "baz": ["bar", "baz"],
+        "foo": "bar",
+        "foobar": ["barbaz"]
+      },
+      "foo": "bar"
+    },
+    "deep": {
+      "bar": {
+        "bar": "baz",
+        "baz": [5, "foo", "bar", "baz", "bar", "baz"],
+        "foo": "bar",
+        "foobar": ["barbaz"]
+      },
+      "foo": "bar"
+    }
+  },
+  "directories": {
+    "sequence": [
+      {
+        "foo": "bar",
+        "bar": {
+          "foo": "bar",
+          "bar": "baz",
+          "baz": [5, "foo", "bar", "baz"]
+        }
+      },
+      {
+        "foo": "bar",
+        "bar": {
+          "baz": ["bar", "baz"],
+          "foobar": ["barbaz"]
+        }
+      }
+    ],
+    "shallow": {
+      "bar": {
+        "baz": ["bar", "baz"],
+        "foobar": ["barbaz"]
+      },
+      "foo": "bar"
+    },
+    "merge": {
+      "bar": {
+        "bar": "baz",
+        "baz": ["bar", "baz"],
+        "foo": "bar",
+        "foobar": ["barbaz"]
+      },
+      "foo": "bar"
+    },
+    "deep": {
+      "bar": {
+        "bar": "baz",
+        "baz": [5, "foo", "bar", "baz", "bar", "baz"],
+        "foo": "bar",
+        "foobar": ["barbaz"]
+      },
+      "foo": "bar"
+    }
+  },
+  "payload": {
+    "plain": {
+      "bar": {
+        "bar": "baz",
+        "baz": 5,
+        "foo": "bar",
+        "foobar": ["barbaz"]
+      },
+      "foo": "bar"
+    },
+    "recursive": [
+      {
+        "bar": {
+          "bar": "baz",
+          "baz": [5, "foo", "bar", "baz"],
+          "foo": "bar"
+        },
+        "foo": "bar"
+      },
+      {
+        "bar": {
+          "baz": ["bar", "baz"],
+          "foobar": ["barbaz"]
+        },
+        "foo": "bar"
+      },
+      {
+        "bar": {
+          "bar": "baz",
+          "baz": [5, "foo", "bar", "baz"],
+          "foo": "bar"
+        },
+        "foo": "bar"
+      },
+      {
+        "bar": {
+          "baz": ["bar", "baz"],
+          "foobar": ["barbaz"]
+        },
+        "foo": "bar"
+      },
+      {
+        "bar": {
+          "baz": ["bar", "baz"],
+          "foobar": ["barbaz"]
+        },
+        "foo": "bar"
+      },
+      { "last": "foo" }
+    ]
+  },
+  "trees": {
+    "plain": {
+      "a": {
+        "bar": {
+          "bar": "baz",
+          "baz": [5, "foo", "bar", "baz"],
+          "foo": "bar"
+        },
+        "foo": "bar"
+      },
+      "b": {
+        "bar": {
+          "baz": ["bar", "baz"],
+          "foobar": ["barbaz"]
+        },
+        "foo": "bar"
+      }
+    },
+    "recursive": {
+      "a": {
+        "bar": {
+          "bar": "baz",
+          "baz": [5, "foo", "bar", "baz"],
+          "foo": "bar"
+        },
+        "foo": "bar"
+      },
+      "b": {
+        "bar": {
+          "baz": ["bar", "baz"],
+          "foobar": ["barbaz"]
+        },
+        "foo": "bar"
+      },
+      "bar": {
+        "a": {
+          "bar": {
+            "bar": "baz",
+            "baz": [5, "foo", "bar", "baz"],
+            "foo": "bar"
+          },
+          "foo": "bar"
+        }
+      },
+      "baz": {
+        "a": {
+          "bar": {
+            "baz": ["bar", "baz"],
+            "foobar": ["barbaz"]
+          },
+          "foo": "bar"
+        },
+        "b": {
+          "bar": {
+            "baz": ["bar", "baz"],
+            "foobar": ["barbaz"]
+          },
+          "foo": "bar"
+        }
+      }
+    },
+    "multiple": {
+      "a": {
+        "bar": {
+          "bar": "baz",
+          "baz": [5, "foo", "bar", "baz", "bar", "baz"],
+          "foo": "bar",
+          "foobar": ["barbaz"]
+        },
+        "foo": "bar",
+        "baz": 5
+      },
+      "b": {
+        "bar": {
+          "baz": ["bar", "baz"],
+          "foobar": ["barbaz"]
+        },
+        "foo": "bar"
+      }
+    }
+  }
+}

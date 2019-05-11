@@ -1,0 +1,9 @@
+foo: bar
+bar:
+  foo: bar
+  bar: baz
+  baz:
+    - !!import/single ../scalar/num.yml
+    - !!import/single ../scalar/string.yml
+    - bar
+    - baz
