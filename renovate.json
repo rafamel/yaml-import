@@ -6,9 +6,10 @@
     ":prHourlyLimitNone",
     ":prConcurrentLimit10",
     ":separateMajorReleases",
-    ":combinePatchMinorReleases"
+    ":combinePatchMinorReleases",
+    ":noUnscheduledUpdates"
   ],
-  "ignoreDeps": ["typescript", "husky"],
+  "ignoreDeps": ["typescript"],
   "packageRules": [
     {
       "packagePatterns": ["*"],
