@@ -1,47 +1,26 @@
-import path from 'path';
-import yaml from 'js-yaml';
-import { IOptions, IPayload } from '~/types';
-import getFiles from './get-files';
-import read from '~/read';
+import { TStrategy } from '~/types';
+import { shallow, merge as _merge, deep } from 'merge-strategies';
+import { DEFAULT_STRATEGY } from '~/constants';
+
+const strategies = {
+  shallow,
+  merge: _merge,
+  deep
+};
 
 export default function merge(
-  payload: IPayload,
-  directory: string,
-  options: IOptions,
-  schemas: yaml.Schema[]
+  data: any[],
+  strategy: TStrategy = DEFAULT_STRATEGY
 ): any {
-  const files = getFiles(payload.paths, directory, options).map((item) => {
-    return path.join(item.dir, item.file);
-  });
-  return trunk(directory, options, schemas, files, payload.data);
-}
+  if (strategy === 'sequence') return data;
+  const fn = strategies[strategy];
 
-export function trunk(
-  directory: string,
-  options: IOptions,
-  schemas: yaml.Schema[],
-  files: string[],
-  data?: any
-): any {
-  let ans: any;
-  const arr = files
-    .map((x) => read(path.join(directory, x), options, schemas))
-    .concat(data || []);
-  const notAllObjs: boolean = arr.reduce((acc: boolean, x) => {
-    return acc || typeof x !== 'object' || Array.isArray(x);
-  }, false);
+  if (!fn) throw Error(`Strategy ${strategy} is not valid`);
+  if (!data.length) return;
 
-  if (notAllObjs) {
-    // If not all elements are objects, concatenate as array
-    ans = arr.reduce((acc, x) => acc.concat(x), []);
-  } else {
-    // If all elements are objects, merge into one object
-    ans = {};
-    for (const obj of arr) {
-      for (const key of Object.keys(obj)) {
-        ans[key] = obj[key];
-      }
-    }
+  let ans: any = data[0];
+  for (let i = 1; i < data.length; i++) {
+    ans = fn(ans, data[i]);
   }
   return ans;
 }

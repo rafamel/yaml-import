@@ -11,9 +11,13 @@ export interface IOptions extends LoadOptions {
   safe?: boolean;
 }
 
+export type TStrategy = 'sequence' | 'shallow' | 'merge' | 'deep';
+
 export interface IPayload {
-  paths: string[];
+  paths: string | string[];
+  strategy?: TStrategy;
   data?: any;
+  recursive?: boolean;
 }
 
 export interface IFileDefinition {
