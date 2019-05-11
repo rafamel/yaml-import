@@ -6,14 +6,19 @@ import { IOptions, IFileDefinition } from '~/types';
 export default function getFiles(
   paths: string[],
   directory: string,
-  options: IOptions
+  options: IOptions,
+  recursive?: boolean
 ): IFileDefinition[] {
   return paths.reduce((acc: IFileDefinition[], file: string) => {
     const stat = fs.statSync(path.join(directory, file));
     return stat.isDirectory()
       ? acc.concat(
-          getRecursiveFromDir(path.join(directory, file), options).map(
-            (item) => ({ cwd: directory, dir: file, file: item })
+          getFromDir(path.join(directory, file), options, recursive).map(
+            (item) => ({
+              cwd: directory,
+              dir: file,
+              file: item
+            })
           )
         )
       : acc.concat({
@@ -24,12 +29,22 @@ export default function getFiles(
   }, []);
 }
 
-export function getRecursiveFromDir(
+export function getFromDir(
   absolute: string,
-  options: IOptions
+  options: IOptions,
+  recursive?: boolean
 ): string[] {
-  return recursivedir(absolute).filter((file) => {
-    const ext = path.extname(file);
-    return !options.ext || options.ext.indexOf(ext) !== -1;
+  const paths = recursive
+    ? recursivedir(absolute)
+    : fs.readdirSync(absolute).filter((item) => {
+        return !fs.statSync(path.join(absolute, item)).isDirectory();
+      });
+
+  return paths.filter((file) => {
+    const parsed = path.parse(file);
+    return (
+      parsed.name[0] !== '.' &&
+      (!options.ext || options.ext.indexOf(parsed.ext) !== -1)
+    );
   });
 }
