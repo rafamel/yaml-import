@@ -1,4 +1,0 @@
-{
-  map: !!import/single ../simples/map/1.yml,
-  seq: !!import/single ../simples/seq/1.yml
-}
