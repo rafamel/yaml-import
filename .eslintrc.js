@@ -1,12 +1,9 @@
-const path = require('path');
-const fs = require('fs');
 const globals = require('eslint-restricted-globals');
 const { configs: ts } = require('@typescript-eslint/eslint-plugin');
 const project = require('./project.config');
 
-const dir = (file) => path.join(project.get('paths.root'), file);
-const prettier = require(dir('.prettierrc'));
-const babel = JSON.parse(fs.readFileSync(dir('.babelrc')));
+const prettier = require('./.prettierrc');
+const babel = require('./babel.config');
 const aliases =
   babel &&
   babel.plugins &&
@@ -75,7 +72,8 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint'],
       // Overrides don't allow for extends
-      rules: Object.assign(ts.recommended.rules, {
+      rules: {
+        ...ts.recommended.rules,
         /* DISABLED */
         '@typescript-eslint/indent': 0,
         '@typescript-eslint/no-explicit-any': 0,
@@ -98,7 +96,7 @@ module.exports = {
         '@typescript-eslint/interface-name-prefix': [2, 'always'],
         '@typescript-eslint/no-use-before-define': [2, { functions: false }],
         '@typescript-eslint/array-type': [2, 'array-simple']
-      })
+      }
     }
   ]
 };
