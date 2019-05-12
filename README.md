@@ -18,67 +18,125 @@ If you find it useful, consider [starring the project](https://github.com/rafame
 
 ## *YAML*
 
-With `yaml-import`, the imports are relative to the current *YAML* file.
+With `yaml-import`, the imports are relative to the current *YAML* file. For further insight on how each import type behaves, you can check the [integration tests root *yaml* file](https://github.com/rafamel/yaml-import/blob/master/test/fixtures/root.yml) and its [expected result.](https://github.com/rafamel/yaml-import/blob/master/test/fixtures/result.json)
 
-### `!!import/single` *file*
+### `!!import/single` *string*
 
 Imports the contents of a single file
 
 ```yaml
-some:
-  - yaml
-  - where I
-import: a file like
-here: !!import/single mydir/myfile.yml
-or:
-  - like below
-  - !!import/single myotherdir/myotherfile.yml
+foo: !!import/single foo/bar.yml
+bar:
+  - item
+  - !!import/single bar/baz.yml
 ```
 
-### `!!import/merge` *array*
+### `!!import/sequence` *string[]*
 
+Resolves with an array of the contents of all files passed. If a directory is passed, it will include all files on that directory.
 Merges the contents of numerous files into one object or array.
 
-- If all the files are objects, it will merge all the keys into one single object.
-- If one or more of the files contain any other type, it will concatenate an array (so if any of the files is an array itself, all its elements will go into the top level).
-
 ```yaml
-!!import/merge [
-  'mydir/file-one.yml',
-  'mydir/file-two.yml',
-  'myotherdir/file-three.yml',
-]
+!!import/sequence
+  - foo/foo.yml
+  - foo/bar.yml
+  - baz/
 ```
 
-### `!!import/dirMerge` *dir*
+### `!!import/shallow` *string[]*
 
-Same as [`!!import/merge`](#importmerge-array), but with all files (recursively) within a directory.
+Resolves with a shallow merge of the contents of all files passed. If a directory is passed, it will include all files on that directory. If a value is not an object, it will overwrite all previous values for that field.
 
 ```yaml
-!!import/dirMerge myNice/dir
+!!import/shallow
+  - foo/foo.yml
+  - foo/bar.yml
+  - baz/
 ```
 
-### `!!import/dirSeq` *dir*
+### `!!import/merge` *string[]*
 
-Creates a `sequence` (array), and the contents of each of the files found within the directory (recursively) will be an element of the array.
+Resolves with a deep merge of the contents of all files passed, excluding arrays -which will be overwritten. If a directory is passed, it will include all files on that directory. If a value is not an object, it will overwrite all previous values for that field.
 
 ```yaml
-!!import/dirSeq myNice/dir
+!!import/merge
+  - foo/foo.yml
+  - foo/bar.yml
+  - baz/
 ```
 
-### `!!import/dirMap` *dir*
+### `!!import/deep` *string[]*
 
-Creates a `mapping` (object) with keys equivalent to the directory tree and files (nested).
+Resolves with a deep merge of the contents of all files passed, including arrays -which will be concatenated. If a directory is passed, it will include all files on that directory. If a value is not an object, it will overwrite all previous values for that field.
 
 ```yaml
-!!import/dirMap myNice/dir
+!!import/deep
+  - foo/foo.yml
+  - foo/bar.yml
+  - baz/
+```
+
+### `!!import/payload` *object*
+
+Takes in an object with fields:
+
+- `paths`: **Required,** *string | string[].* Paths to import -files or directories.
+- `strategy`: **Optional,** *string.* Any of `'sequence'`, `'shallow'`, `'merge'`, and `'deep'`. Default: `'merge'`.
+- `data`: **Optional.** Any additional data to be treated as coming from an additional last element of `paths` -that is, the content of `paths` will be merged with `data` with the chosen `strategy`.
+- `recursive`: **Optional,** *boolean.* Whether to recursively traverse directories when passed as `paths`. Default: `false`.
+
+Hence, these would be equivalent:
+
+```yaml
+# These would be equivalent:
+!!import/merge
+  - foo/foo.yml
+!!import/payload
+  paths: foo/foo.yml
+
+# And these would too:
+!!import/deep
+  - foo/foo.yml
+  - foo/bar.yml
+!!import/payload
+  strategy: deep
+  paths:
+    - foo/foo.yml
+    - foo/bar.yml
+```
+
+### `!!import/tree` *object*
+
+Creates an object with keys equivalent to the directory tree and files from each path in `paths`, then merges all of them with `strategy`.
+
+Takes in an object with fields:
+
+- `paths`: **Required,** *string | string[].* Paths to import -files or directories.
+- `strategy`: **Optional,** *string.* Any of `'sequence'`, `'shallow'`, `'merge'`, and `'deep'`. Default: `'merge'`.
+- `data`: **Optional.** Any additional data to be treated as coming from an additional last element of `paths` -that is, the content of `paths` will be merged with `data` with the chosen `strategy`.
+- `recursive`: **Optional,** *boolean.* Whether to recursively traverse directories when passed as `paths`. Default: `false`.
+
+```yaml
+# If we had the following tree, it would resolve with an object with keys 'a'
+# and 'b', and the contents of 'a' would be merged following a 'deep' strategy:
+#   foo
+#     a.yml
+#     b.yml
+#   bar
+#     a.yml
+
+!!import/tree
+  strategy: deep
+  paths:
+    - foo/
+    - bar/
 ```
 
 ## Usage
 
 ### Command Line
 
-If there is no `output` file, the contents will be written to `stdout`. The list of `ext` -file extensions for directory imports, see [`write`](#writeinput-output-options-schemas)- must be comma separated, without spaces or dots.
+If there is no `output` file, the contents will be written to `stdout`. The list of `ext` -file extensions for directory imports, see [`write`](#writeinput-output-options-schemas)- must be comma separated, without spaces.
 
 ```bash
 Usage:
@@ -101,20 +159,20 @@ Example:
 
 Reads a *YAML* file and writes the output on a file.
 
-- `input`: *String*, the path of the file to read.
-- `output`: *String*, the path for the output file.
-- `options` *Object, optional:*
-  - `ext`: *Array*, list of extensions to use for directory imports. By default, `['.yml', '.yaml']`.
-  - `safe`: *Boolean*, whether it should use `safeLoad` or `load` when loading the *YAML* file via [*js-yaml*](https://www.npmjs.com/package/js-yaml). `true` by default.
-  - [All others taken by *js-yaml*](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
-- `schemas`: *Array, optional,* yaml schemas to extend.
+- `input`: **Required,** *string.* Path of the file to read.
+- `output`: **Required,** *string*. Path for the output file.
+- `options` **Optional,** *object:*
+  - `ext`: **Optional,** *string[].* List of extensions to use for directory imports. Default: `['.yml', '.yaml']`.
+  - `safe`: **Optional,** *boolean*. Whether to use `safeLoad` or `load` when loading *YAML* files via [*js-yaml*](https://www.npmjs.com/package/js-yaml). Default: `true`.
+  - [All other options taken by *js-yaml*](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
+- `schemas`: **Optional,** *array.* *YAML* schemas to extend.
 
 ```javascript
 import path from 'path';
 import { write } from 'yaml-import';
 
 write(
-  path.join(__dirname, 'myfiles/base.yml'),
+  path.join(__dirname, 'foo/root.yml'),
   path.join(__dirname, 'out/yaml.yml')
 );
 ```
@@ -123,15 +181,15 @@ write(
 
 Reads a *YAML* file and returns the parsed object.
 
-- `input`: *String*, the path of the file to read.
-- `options`: *Object, optional,* same as those taken by [`write`](#writeinput-output-options-schemas).
-- `schemas`: *Array, optional,* yaml schemas to extend.
+- `input`: **Required,** *string.* Path of the file to read.
+- `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas).
+- `schemas`: **Optional,** *array.* *YAML* schemas to extend.
 
 ```javascript
 import path from 'path';
 import { read } from 'yaml-import';
 
-const myYmlObj = read(path.join(__dirname, 'myfiles/base.yml'));
+const content = read(path.join(__dirname, 'foo/root.yml'));
 ```
 
 We could write it later on with `js-yaml` and `fs`:
@@ -141,18 +199,18 @@ import yaml from 'js-yaml';
 import fs from 'fs';
 
 // To YAML
-const myYml = yaml.dump(myYmlObj);
+const text = yaml.dump(content);
 // Write to file
-fs.writeFileSync(path.join(__dirname, 'output.yml'), myYml);
+fs.writeFileSync(path.join(__dirname, 'out/yaml.yml'), text);
 ```
 
-### `getSchema(directory, options?, schemas?)`
+### `getSchema(cwd, options?, schemas?)`
 
 For flexible usage with *js-yaml,* `getSchema` returns a `schema` you can pass to [*js-yaml*](https://www.npmjs.com/package/js-yaml) functions.
 
-- `directory`: *String*, the base directory to read the imported files from.
-- `options`: *Object, optional,* same as those taken by [`write`](#writeinput-output-options-schemas). Used when files to import are loaded.
-- `schemas`: *Array, optional,* yaml schemas to extend.
+- `cwd`: **Required,** *string.* Base directory to read imported files from.
+- `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas). Used when files to import are loaded.
+- `schemas`: **Optional,** *array.* *YAML* schemas to extend.
 
 ```javascript
 import path from 'path';
@@ -160,8 +218,8 @@ import fs from 'fs';
 import yaml from 'js-yaml';
 import { getSchema } from 'yaml-import';
 
-const src = fs.readFileSync(path.join(__dirname, 'myfiles/base.yml'), 'utf8');
-const dir = path.join(__dirname, 'myfiles');
-const schema = getSchema(dir);
-const myYml = yaml.safeLoad(src, { schema: schema });
+const src = fs.readFileSync(path.join(__dirname, 'foo/root.yml'), 'utf8');
+const cwd = path.join(__dirname, 'foo');
+const schema = getSchema(cwd);
+const content = yaml.safeLoad(src, { schema: schema });
 ```
