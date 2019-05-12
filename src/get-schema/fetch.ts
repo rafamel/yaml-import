@@ -11,11 +11,11 @@ export default function fetch(
   schemas: yaml.Schema[]
 ): any[] {
   const paths = Array.isArray(payload.paths) ? payload.paths : [payload.paths];
-  const files = getFiles(paths, directory, options, payload.recursive).map(
-    (item) => path.join(item.dir, item.file)
-  );
+  const files = getFiles(paths, directory, options, payload.recursive);
 
   return files
-    .map((x) => read(path.join(directory, x), options, schemas))
+    .map((file) =>
+      read(path.join(file.cwd, file.directory, file.name), options, schemas)
+    )
     .concat(payload.data || []);
 }

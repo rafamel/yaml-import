@@ -1,14 +1,14 @@
 import yaml from 'js-yaml';
-import path from 'path';
 import { IOptions, IPayload } from '~/types';
 import read from '~/read';
 import fetch from './fetch';
 import merge from './merge';
 import createTree from './create-tree';
 import validatePayload from './validate-payload';
+import absolute from './absolute';
 
 export default function getSchema(
-  directory: string,
+  cwd: string,
   options?: IOptions | null,
   schemas: yaml.Schema[] = [yaml.DEFAULT_SAFE_SCHEMA]
 ): yaml.Schema {
@@ -17,11 +17,11 @@ export default function getSchema(
   const types = [
     new yaml.Type('tag:yaml.org,2002:import/single', {
       kind: 'scalar',
-      resolve(data) {
-        return typeof data === 'string';
+      resolve(file) {
+        return typeof file === 'string';
       },
-      construct(data) {
-        return read(path.join(directory, data), opts, schemas);
+      construct(file) {
+        return read(absolute({ file, cwd }), opts, schemas);
       }
     }),
     new yaml.Type('tag:yaml.org,2002:import/sequence', {
@@ -31,10 +31,7 @@ export default function getSchema(
       },
       construct(files) {
         const payload: IPayload = { paths: files, strategy: 'sequence' };
-        return merge(
-          fetch(payload, directory, opts, schemas),
-          payload.strategy
-        );
+        return merge(fetch(payload, cwd, opts, schemas), payload.strategy);
       }
     }),
     new yaml.Type('tag:yaml.org,2002:import/shallow', {
@@ -44,10 +41,7 @@ export default function getSchema(
       },
       construct(files) {
         const payload: IPayload = { paths: files, strategy: 'shallow' };
-        return merge(
-          fetch(payload, directory, opts, schemas),
-          payload.strategy
-        );
+        return merge(fetch(payload, cwd, opts, schemas), payload.strategy);
       }
     }),
     new yaml.Type('tag:yaml.org,2002:import/merge', {
@@ -57,10 +51,7 @@ export default function getSchema(
       },
       construct(files) {
         const payload: IPayload = { paths: files, strategy: 'merge' };
-        return merge(
-          fetch(payload, directory, opts, schemas),
-          payload.strategy
-        );
+        return merge(fetch(payload, cwd, opts, schemas), payload.strategy);
       }
     }),
     new yaml.Type('tag:yaml.org,2002:import/deep', {
@@ -70,10 +61,7 @@ export default function getSchema(
       },
       construct(files) {
         const payload: IPayload = { paths: files, strategy: 'deep' };
-        return merge(
-          fetch(payload, directory, opts, schemas),
-          payload.strategy
-        );
+        return merge(fetch(payload, cwd, opts, schemas), payload.strategy);
       }
     }),
     new yaml.Type('tag:yaml.org,2002:import/payload', {
@@ -82,10 +70,7 @@ export default function getSchema(
         return validatePayload(payload);
       },
       construct(payload: IPayload) {
-        return merge(
-          fetch(payload, directory, opts, schemas),
-          payload.strategy
-        );
+        return merge(fetch(payload, cwd, opts, schemas), payload.strategy);
       }
     }),
     new yaml.Type('tag:yaml.org,2002:import/tree', {
@@ -99,7 +84,7 @@ export default function getSchema(
           : [payload.paths];
         const data = paths
           .map((path) =>
-            createTree(path, directory, opts, schemas, payload.recursive)
+            createTree(path, cwd, opts, schemas, payload.recursive)
           )
           .concat(payload.data || []);
         return merge(data, payload.strategy);

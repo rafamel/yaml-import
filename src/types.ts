@@ -22,6 +22,6 @@ export interface IPayload {
 
 export interface IFileDefinition {
   cwd: string;
-  dir: string;
-  file: string;
+  directory: string;
+  name: string;
 }

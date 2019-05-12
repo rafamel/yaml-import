@@ -9,7 +9,7 @@ export default function read(
   options?: IOptions | null,
   schemas?: yaml.Schema[]
 ): any {
-  const dir = path.dirname(input);
+  const cwd = path.dirname(input);
   const src = fs.readFileSync(input, 'utf8');
 
   const opts = Object.assign({ safe: true }, options);
@@ -17,6 +17,6 @@ export default function read(
   return yaml[opts.safe ? 'safeLoad' : 'load'](src, {
     ...opts,
     filename: input,
-    schema: getSchema(dir, opts, schemas)
+    schema: getSchema(cwd, opts, schemas)
   });
 }

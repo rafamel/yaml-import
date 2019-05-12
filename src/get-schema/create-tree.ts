@@ -15,12 +15,12 @@ export default function createTree(
   const obj: any = {};
   getFiles([file], directory, options, recursive).forEach((item) => {
     const content = read(
-      path.join(directory, item.dir, item.file),
+      path.join(item.cwd, item.directory, item.name),
       options,
       schemas
     );
     // Get keys
-    let keys = item.file.split(path.sep);
+    let keys = path.join(item.directory, item.name).split(path.sep);
     keys[keys.length - 1] = path.basename(
       keys[keys.length - 1],
       path.extname(keys[keys.length - 1])

@@ -2,29 +2,29 @@ import path from 'path';
 import fs from 'fs';
 import recursivedir from 'fs-readdir-recursive';
 import { IOptions, IFileDefinition } from '~/types';
+import absolute from './absolute';
 
 export default function getFiles(
   paths: string[],
-  directory: string,
+  cwd: string,
   options: IOptions,
   recursive?: boolean
 ): IFileDefinition[] {
   return paths.reduce((acc: IFileDefinition[], file: string) => {
-    const stat = fs.statSync(path.join(directory, file));
+    file = absolute({ file, cwd });
+    const stat = fs.statSync(file);
     return stat.isDirectory()
       ? acc.concat(
-          getFromDir(path.join(directory, file), options, recursive).map(
-            (item) => ({
-              cwd: directory,
-              dir: file,
-              file: item
-            })
-          )
+          getFromDir(file, options, recursive).map((item) => ({
+            cwd: file,
+            directory: path.dirname(item),
+            name: path.basename(item)
+          }))
         )
       : acc.concat({
-          cwd: directory,
-          dir: path.dirname(file),
-          file: path.basename(file)
+          cwd,
+          directory: '.',
+          name: path.relative(cwd, file)
         });
   }, []);
 }
