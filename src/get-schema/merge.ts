@@ -12,7 +12,7 @@ export default function merge(
   data: any[],
   strategy: TStrategy = DEFAULT_STRATEGY
 ): any {
-  if (strategy === 'sequence') return data;
+  if (strategy === 'sequence') return data.concat();
   const fn = strategies[strategy];
 
   if (!fn) throw Error(`Strategy ${strategy} is not valid`);
