@@ -54,8 +54,7 @@ module.exports.scripts = {
     ['git push', 'git push --tags']
   ],
   watch: {
-    default: line`onchange ./src/**/*.{${vars.ext}}
-      --initial --kill -- kpo watch.task`,
+    default: 'onchange ./src --initial --kill -- kpo watch.task',
     $task: [
       log`\x1Bc⚡`,
       parallel(['kpo build.pack build.types', 'kpo lint'], {
@@ -80,8 +79,7 @@ module.exports.scripts = {
     default: kpo`lint types test.force`,
     force: series.env('jest', { NODE_ENV: 'test' }),
     watch: {
-      default: line`onchange ./{src,test}/**/*.{${vars.ext}}
-      --initial --kill -- kpo test.watch.task`,
+      default: 'onchange ./{src,test} --initial --kill -- kpo test.watch.task',
       $task: [log`\x1Bc⚡`, kpo`test`]
     }
   },
