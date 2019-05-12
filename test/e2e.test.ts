@@ -2,7 +2,14 @@ import path from 'path';
 import read from '~/read';
 import json from './fixtures/result.json';
 
-test(`e2e`, () => {
-  const result = read(path.join(__dirname, 'fixtures/root.yml'));
+const root = path.join(__dirname, 'fixtures/root.yml');
+
+test(`wo/ extensions`, () => {
+  const result = read(root);
   expect(result).toEqual(json);
+});
+
+test(`w/ extensions`, () => {
+  const result = read(root, { ext: ['.yml', '.raml'] });
+  expect(result).toEqual({ ...json, extensions: ['raml', 5, 'foo'] });
 });

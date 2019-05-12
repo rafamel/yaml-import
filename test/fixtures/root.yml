@@ -34,6 +34,7 @@ payload:
     paths: ./foo
     data:
       last: foo
+extensions: !!import/sequence [./scalar]
 trees:
   plain: !!import/tree
     paths: ./foo

@@ -140,6 +140,7 @@
       { "last": "foo" }
     ]
   },
+  "extensions": [5, "foo"],
   "trees": {
     "plain": {
       "a": {
