@@ -46,7 +46,10 @@ module.exports.scripts = {
       log.fn`Recommended version bump: ${releaseType}\n    ${reason}`;
       return confirm({
         no: Error(),
-        yes: series.env(`npm version ${type || releaseType}`, { SEMANTIC: '#' })
+        yes: series(`npm version ${type || releaseType}`, {
+          args: [],
+          env: { SEMANTIC: '#' }
+        })
       });
     }),
   release: [
