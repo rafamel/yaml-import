@@ -15,7 +15,7 @@
       "packagePatterns": ["*"],
       "rangeStrategy": "replace",
       "semanticCommitType": "fix",
-      "extends": ["schedule:weekly"],
+      "extends": ["schedule:daily"],
       "minor": {
         "extends": ["schedule:monthly"],
         "groupName": "all non-major dependencies",
