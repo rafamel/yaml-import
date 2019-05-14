@@ -34,7 +34,6 @@ bar:
 ### `!!import/sequence` *string[]*
 
 Resolves with an array of the contents of all files passed. If a directory is passed, it will include all files on that directory.
-Merges the contents of numerous files into one object or array.
 
 ```yaml
 !!import/sequence
@@ -84,8 +83,6 @@ Takes in an object with fields:
 - `strategy`: **Optional,** *string.* Any of `'sequence'`, `'shallow'`, `'merge'`, and `'deep'`. Default: `'merge'`.
 - `data`: **Optional.** Any additional data to be treated as coming from an additional last element of `paths` -that is, the content of `paths` will be merged with `data` with the chosen `strategy`.
 - `recursive`: **Optional,** *boolean.* Whether to recursively traverse directories when passed as `paths`. Default: `false`.
-
-Hence, these would be equivalent:
 
 ```yaml
 # These would be equivalent:
