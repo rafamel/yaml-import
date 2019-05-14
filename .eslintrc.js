@@ -3,7 +3,7 @@ const { configs: ts } = require('@typescript-eslint/eslint-plugin');
 const project = require('./project.config');
 
 const prettier = require('./.prettierrc');
-const babel = require('./babel.config');
+const babel = require('./.babelrc');
 const aliases =
   babel &&
   babel.plugins &&

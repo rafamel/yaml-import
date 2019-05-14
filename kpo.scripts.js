@@ -68,7 +68,7 @@ module.exports.scripts = {
   fix: {
     default: kpo`fix.format fix.scripts`,
     format: `prettier --write ./**/*.{${vars.ext},json,scss}`,
-    scripts: kpo`:raise --confirm --fail`
+    scripts: kpo`:raise --purge --confirm --fail`
   },
   types: project.typescript && 'tsc --noEmit --emitDeclarationOnly false',
   lint: {
@@ -92,6 +92,7 @@ module.exports.scripts = {
   ],
   changelog: 'conventional-changelog -p angular -i CHANGELOG.md -s -r 0',
   update: ['npm update', 'npm outdated'],
+  outdated: 'npm outdated',
   clean: {
     default: kpo`clean.top clean.modules`,
     top: remove(

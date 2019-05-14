@@ -10,11 +10,11 @@
     "require",
     "js-yaml"
   ],
-  "engines": {
-    "node": ">=8"
-  },
   "bin": {
     "yimp": "dist-node/bin/yimp.js"
+  },
+  "engines": {
+    "node": ">=8"
   },
   "main": "pkg/dist-node/index.js",
   "types": "pkg/dist-types/index.d.ts",
@@ -40,6 +40,7 @@
     "docs": "kpo docs --",
     "changelog": "kpo changelog --",
     "update": "kpo update --",
+    "outdated": "kpo outdated --",
     "clean": "kpo clean --",
     "clean.top": "kpo clean.top --",
     "clean.modules": "kpo clean.modules --",
