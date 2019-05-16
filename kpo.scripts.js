@@ -1,5 +1,5 @@
 // prettier-ignore
-const { series, parallel, ensure, line, json, log, confirm, rm, remove, copy, kpo, silent } = require('kpo');
+const { series, parallel, ensure, line, json, log, confirm, rm, remove, kpo, silent } = require('kpo');
 const path = require('path');
 const bump = require('conventional-recommended-bump');
 const { promisify } = require('util');
@@ -21,7 +21,7 @@ module.exports.scripts = {
   build: {
     default: kpo`validate build.force`,
     force: series.env('kpo build.pack build.types', { NODE_ENV: 'production' }),
-    $pack: [ensure`./pkg`, 'pack build', copy(['.npmignore'], './pkg')].concat(
+    $pack: [ensure`./pkg`, 'pack build'].concat(
       vars.node && [
         line`babel src --out-dir ./pkg/dist-node
         --extensions ${vars.dotExt} --source-maps inline`,
@@ -52,8 +52,10 @@ module.exports.scripts = {
       });
     }),
   release: [
+    series('npm publish --dry-run', { cwd: './pkg' }),
+    confirm({ no: Error() }),
     series('npm publish', { cwd: './pkg' }),
-    ['git push', 'git push --tags']
+    series(['git push', 'git push --tags'], { args: [] })
   ],
   watch: {
     default: 'onchange ./src --initial --kill -- kpo watch.task',
