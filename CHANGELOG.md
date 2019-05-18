@@ -1,3 +1,12 @@
+# [1.0.0](https://github.com/rafamel/yaml-import/compare/v1.0.0-beta.0...v1.0.0) (2019-05-18)
+
+
+### Bug Fixes
+
+* **deps:** updates dependencies ([2953f62](https://github.com/rafamel/yaml-import/commit/2953f62))
+
+
+
 # [1.0.0-beta.0](https://github.com/rafamel/yaml-import/compare/v0.3.1...v1.0.0-beta.0) (2019-05-12)
 
 
