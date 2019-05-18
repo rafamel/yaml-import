@@ -115,13 +115,12 @@ Takes in an object with fields:
 
 ```yaml
 # If we had the following tree, it would resolve with an object with keys 'a'
-# and 'b', and the contents of 'a' would be merged following a 'deep' strategy:
+# and 'b', while the contents of 'a' would be merged with a 'deep' strategy:
 #   foo
 #     a.yml
 #     b.yml
 #   bar
 #     a.yml
-
 !!import/tree
   strategy: deep
   paths:
