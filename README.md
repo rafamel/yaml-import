@@ -14,7 +14,8 @@ If you find it useful, consider [starring the project](https://github.com/rafame
 
 ## Install
 
-[`npm install yaml-import`](https://www.npmjs.com/package/yaml-import)
+- Global install -the `yimp` executable will be globally available: `npm install -g yaml-import`.
+- Local install -for programmatic usage: `npm install yaml-import`.
 
 ## *YAML*
 
