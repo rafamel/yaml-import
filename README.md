@@ -14,8 +14,8 @@ If you find it useful, consider [starring the project](https://github.com/rafame
 
 ## Install
 
-- Global install -the `yimp` executable will be globally available: `npm install -g yaml-import`.
-- Local install -for programmatic usage: `npm install yaml-import`.
+* Global install -the `yimp` executable will be globally available: `npm install -g yaml-import`.
+* Local install -for programmatic usage: `npm install yaml-import`.
 
 ## *YAML*
 
@@ -80,10 +80,10 @@ Resolves with a deep merge of the contents of all files passed, including arrays
 
 Takes in an object with fields:
 
-- `paths`: **Required,** *string | string[].* Paths to import -files or directories.
-- `strategy`: **Optional,** *string.* Any of `'sequence'`, `'shallow'`, `'merge'`, and `'deep'`. Default: `'merge'`.
-- `data`: **Optional.** Any additional data to be treated as coming from an additional last element of `paths` -that is, the content of `paths` will be merged with `data` with the chosen `strategy`.
-- `recursive`: **Optional,** *boolean.* Whether to recursively traverse directories when passed as `paths`. Default: `false`.
+* `paths`: **Required,** *string | string[].* Paths to import -files or directories.
+* `strategy`: **Optional,** *string.* Any of `'sequence'`, `'shallow'`, `'merge'`, and `'deep'`. Default: `'merge'`.
+* `data`: **Optional.** Any additional data to be treated as coming from an additional last element of `paths` -that is, the content of `paths` will be merged with `data` with the chosen `strategy`.
+* `recursive`: **Optional,** *boolean.* Whether to recursively traverse directories when passed as `paths`. Default: `false`.
 
 ```yaml
 # These would be equivalent:
@@ -109,10 +109,10 @@ Creates an object with keys equivalent to the directory tree and files from each
 
 Takes in an object with fields:
 
-- `paths`: **Required,** *string | string[].* Paths to import -files or directories.
-- `strategy`: **Optional,** *string.* Any of `'sequence'`, `'shallow'`, `'merge'`, and `'deep'`. Default: `'merge'`.
-- `data`: **Optional.** Any additional data to be treated as coming from an additional last element of `paths` -that is, the content of `paths` will be merged with `data` with the chosen `strategy`.
-- `recursive`: **Optional,** *boolean.* Whether to recursively traverse directories when passed as `paths`. Default: `false`.
+* `paths`: **Required,** *string | string[].* Paths to import -files or directories.
+* `strategy`: **Optional,** *string.* Any of `'sequence'`, `'shallow'`, `'merge'`, and `'deep'`. Default: `'merge'`.
+* `data`: **Optional.** Any additional data to be treated as coming from an additional last element of `paths` -that is, the content of `paths` will be merged with `data` with the chosen `strategy`.
+* `recursive`: **Optional,** *boolean.* Whether to recursively traverse directories when passed as `paths`. Default: `false`.
 
 ```yaml
 # If we had the following tree, it would resolve with an object with keys 'a'
@@ -135,7 +135,7 @@ Takes in an object with fields:
 
 If there is no `output` file, the contents will be written to `stdout`. The list of `ext` -file extensions for directory imports, see [`write`](#writeinput-output-options-schemas)- must be comma separated, without spaces.
 
-```bash
+```
 Usage:
   $ yimp [options]
 
@@ -156,13 +156,13 @@ Example:
 
 Reads a *YAML* file and writes the output on a file.
 
-- `input`: **Required,** *string.* Path of the file to read.
-- `output`: **Required,** *string*. Path for the output file.
-- `options` **Optional,** *object:*
-  - `ext`: **Optional,** *string[].* List of extensions to use for directory imports. Default: `['.yml', '.yaml']`.
-  - `safe`: **Optional,** *boolean*. Whether to use `safeLoad` or `load` when loading *YAML* files via [*js-yaml*](https://www.npmjs.com/package/js-yaml). Default: `true`.
-  - [All other options taken by *js-yaml*](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
-- `schemas`: **Optional,** *array.* *YAML* schemas to extend.
+* `input`: **Required,** *string.* Path of the file to read.
+* `output`: **Required,** *string*. Path for the output file.
+* `options` **Optional,** *object:*
+  * `ext`: **Optional,** *string[].* List of extensions to use for directory imports. Default: `['.yml', '.yaml']`.
+  * `safe`: **Optional,** *boolean*. Whether to use `safeLoad` or `load` when loading *YAML* files via [*js-yaml*](https://www.npmjs.com/package/js-yaml). Default: `true`.
+  * [All other options taken by *js-yaml*](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
+* `schemas`: **Optional,** *array.* *YAML* schemas to extend.
 
 ```javascript
 import path from 'path';
@@ -178,9 +178,9 @@ write(
 
 Reads a *YAML* file and returns the parsed object.
 
-- `input`: **Required,** *string.* Path of the file to read.
-- `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas).
-- `schemas`: **Optional,** *array.* *YAML* schemas to extend.
+* `input`: **Required,** *string.* Path of the file to read.
+* `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas).
+* `schemas`: **Optional,** *array.* *YAML* schemas to extend.
 
 ```javascript
 import path from 'path';
@@ -205,9 +205,9 @@ fs.writeFileSync(path.join(__dirname, 'out/yaml.yml'), text);
 
 For flexible usage with *js-yaml,* `getSchema` returns a `schema` you can pass to [*js-yaml*](https://www.npmjs.com/package/js-yaml) functions.
 
-- `cwd`: **Required,** *string.* Base directory to read imported files from.
-- `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas). Used when files to import are loaded.
-- `schemas`: **Optional,** *array.* *YAML* schemas to extend.
+* `cwd`: **Required,** *string.* Base directory to read imported files from.
+* `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas). Used when files to import are loaded.
+* `schemas`: **Optional,** *array.* *YAML* schemas to extend.
 
 ```javascript
 import path from 'path';
