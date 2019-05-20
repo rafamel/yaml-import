@@ -98,7 +98,7 @@
     "jest-cli": "^24.8.0",
     "kpo": "^0.6.0",
     "markdownlint-cli": "^0.16.0",
-    "onchange": "^5.2.0",
+    "onchange": "^6.0.0",
     "prettier": "^1.17.1",
     "slimconf": "^0.9.1",
     "ttypescript": "^1.5.6",
