@@ -1,15 +1,12 @@
 // prettier-ignore
-const { series, parallel, ensure, line, json, log, confirm, rm, remove, kpo, silent } = require('kpo');
+const { series, parallel, ensure, line, json, log, confirm, rm, remove, kpo, silent, copy, glob } = require('kpo');
 const path = require('path');
-const bump = require('conventional-recommended-bump');
 const { promisify } = require('util');
-const { merge } = require('slimconf');
 const project = require('./project.config');
 
-// prettier-ignore
-verify('nodeOnly', 'typescript', 'ext.js', 'ext.ts', 'paths.docs', 'release.build', 'release.docs');
+verify('esnext', 'typescript', 'ext.js', 'ext.ts');
+verify('paths.docs', 'release.build', 'release.docs');
 const vars = {
-  node: !!project.nodeOnly,
   semantic: !!process.env.SEMANTIC,
   commit: !!process.env.COMMITIZEN || !!process.env.SEMANTIC,
   ext: extensions(),
@@ -19,28 +16,33 @@ const vars = {
 module.exports.scripts = {
   start: kpo`watch`,
   build: {
-    default: kpo`validate build.force`,
-    force: series.env('kpo build.pack build.types', { NODE_ENV: 'production' }),
-    $pack: [ensure`./pkg`, 'pack build'].concat(
-      vars.node && [
-        line`babel src --out-dir ./pkg/dist-node
-        --extensions ${vars.dotExt} --source-maps inline`,
-        json('./pkg/package.json', (pkg) => {
-          if (pkg.main || pkg.module || pkg.esnext) throw Error(`!node pack`);
-          return merge(pkg, { main: 'dist-node/index.js' });
-        })
-      ]
+    default: series.env('kpo validate build.force', { NODE_ENV: 'production' }),
+    force: kpo`build.pack build.node build.types`,
+    $pack: [
+      [rm`pkg`, ensure`pkg`, series.env('pack build', { ESNEXT: '#' })],
+      json('./pkg/package.json', ({ json }) => {
+        const fail = project.esnext
+          ? !json.esnext || !json.module
+          : json.esnext || json.module;
+        if (fail) throw Error(`Bad @pika/pack configuration for esnext`);
+        return {
+          ...json,
+          main: 'dist-node/index.js',
+          types: project.typescript ? 'dist-types/index.d.ts' : undefined
+        };
+      })
+    ],
+    $node: series(
+      'babel ./src --out-dir ./pkg/dist-node --source-maps inline',
+      { args: ['--extensions', vars.dotExt] }
     ),
     $types: project.typescript && [
       `ttsc --project ttsconfig.json --outDir ./pkg/dist-types/`,
-      json('./pkg/package.json', (pkg) => {
-        return merge(pkg, { types: 'dist-types/index.d.ts' });
-      }),
-      log`Declaration files built`
+      copy(glob`./src/**/*.d.ts`, { from: 'src', to: 'pkg/dist-types' })
     ]
   },
   commit: series.env('git-cz', { COMMITIZEN: '#' }),
-  semantic: ([type]) =>
+  semantic: ([type], bump = require('conventional-recommended-bump')) =>
     promisify(bump)({ preset: 'angular' }).then(({ reason, releaseType }) => {
       type ? log.fn`\nVersion bump: ${type}` : log.fn``;
       log.fn`Recommended version bump: ${releaseType}\n    ${reason}`;
@@ -61,8 +63,8 @@ module.exports.scripts = {
     default: 'onchange ./src --initial --kill -- kpo watch.task',
     $task: [
       log`\x1Bc⚡`,
-      parallel(['kpo build.pack build.types', 'kpo lint'], {
-        names: ['build', 'eslint'],
+      parallel(['kpo build.force', 'kpo lint types'], {
+        names: ['build', 'lint'],
         colors: ['blue', 'yellow']
       })
     ]
@@ -76,7 +78,7 @@ module.exports.scripts = {
   lint: {
     default: `eslint ./src ./test --ext ${vars.dotExt}`,
     md: line`markdownlint README.md
-    --config ${path.join(__dirname, 'markdown.json')}`,
+      --config ${path.join(__dirname, 'markdown.json')}`,
     scripts: kpo`:raise --dry --fail`
   },
   test: {
@@ -113,8 +115,8 @@ module.exports.scripts = {
   version: [
     kpo`preversion`,
     kpo`changelog`,
-    project.release.docs && kpo`docs`,
     project.release.build && kpo`build`,
+    project.release.docs && kpo`docs`,
     'git add .'
   ]
 };
@@ -124,8 +126,9 @@ function verify(...arr) {
 }
 
 function extensions() {
-  return (project.typescript ? project.ext.ts.split(',') : [])
-    .concat(project.ext.js)
+  return project.ext.js
+    .split(',')
+    .concat(project.typescript ? project.ext.ts.split(',') : [])
     .filter(Boolean)
     .join(',');
 }

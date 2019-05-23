@@ -2,8 +2,9 @@ const path = require('path');
 const { default: slim } = require('slimconf');
 
 module.exports = slim({
-  // transpile straight up with babel.
-  nodeOnly: true,
+  // Transpiles to esnext
+  esnext: false,
+  // Enables typescript and declaration files
   typescript: true,
   // Extensions allowed for each file type, as a comma separated string
   ext: {

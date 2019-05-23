@@ -4,5 +4,6 @@
   },
   "line-length": false,
   "no-inline-html": false,
-  "fenced-code-language": false
+  "fenced-code-language": false,
+  "commands-show-output": false
 }

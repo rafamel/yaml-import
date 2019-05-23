@@ -11,7 +11,9 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [`<rootDir>/src/**/*.{${EXT}}`],
   modulePathIgnorePatterns: [
+    '.*\\.d\\.ts$',
     '<rootDir>/pkg',
+    '<rootDir>/dist',
     '<rootDir>/src/@types',
     '<rootDir>/src/.*/__mocks__',
     '<rootDir>/src/bin/yimp.ts'

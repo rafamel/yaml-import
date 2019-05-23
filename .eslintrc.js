@@ -1,9 +1,10 @@
 const globals = require('eslint-restricted-globals');
 const { configs: ts } = require('@typescript-eslint/eslint-plugin');
 const project = require('./project.config');
+const path = require('path');
 
-const prettier = require('./.prettierrc');
-const babel = require('./.babelrc');
+const prettier = require(path.join(project.get('paths.root'), '.prettierrc'));
+const babel = require(path.join(project.get('paths.root'), '.babelrc'));
 const aliases =
   babel &&
   babel.plugins &&
