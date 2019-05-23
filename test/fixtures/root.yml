@@ -34,6 +34,17 @@ payload:
     paths: ./foo
     data:
       last: foo
+  arr: !!import/payload
+    strategy: deep
+    paths: ./arr.yml
+    data:
+      - key: bar
+        value: bar
+  falsy: !!import/payload
+    strategy: merge
+    paths: ./arr.yml
+    data:
+      false
 extensions: !!import/sequence [./scalar]
 trees:
   plain: !!import/tree
