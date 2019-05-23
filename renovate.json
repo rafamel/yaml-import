@@ -27,7 +27,7 @@
       "rangeStrategy": "replace",
       "semanticCommitType": "chore",
       "commitMessageSuffix": "(development)",
-      "schedule": "before 3am on the first day of the year",
+      "extends": ["schedule:monthly"],
       "minor": {
         "groupName": "all non-major dependencies",
         "groupSlug": "all-dev-minor-patch"
