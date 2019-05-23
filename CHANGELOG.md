@@ -1,3 +1,18 @@
+# [2.0.0](https://github.com/rafamel/yaml-import/compare/v1.0.0...v2.0.0) (2019-05-23)
+
+
+### Bug Fixes
+
+* **get-schema/fetch:** !!payload/deep doesn't overwrite items with data when both files and data con ([bd9ac6a](https://github.com/rafamel/yaml-import/commit/bd9ac6a))
+
+
+### BREAKING CHANGES
+
+* **get-schema/fetch:** !!payload/deep previously overwrote all data with the contents of the payload data
+field when it was an array, even if all files data were an array too. It now correctly concatenates.
+
+
+
 # [1.0.0](https://github.com/rafamel/yaml-import/compare/v1.0.0-beta.0...v1.0.0) (2019-05-18)
 
 
