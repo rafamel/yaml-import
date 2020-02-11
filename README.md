@@ -10,8 +10,6 @@
 
 > Import files and directories in *YAML* for a modular design
 
-If you find it useful, consider [starring the project](https://github.com/rafamel/yaml-import) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way!
-
 ## Install
 
 * Global install -the `yimp` executable will be globally available: `npm install -g yaml-import`.

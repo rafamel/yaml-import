@@ -17,5 +17,5 @@ export default function fetch(
     .map((file) =>
       read(path.join(file.cwd, file.directory, file.name), options, schemas)
     )
-    .concat(payload.hasOwnProperty('data') ? [payload.data] : []);
+    .concat(Object.hasOwnProperty.call(payload, 'data') ? [payload.data] : []);
 }
