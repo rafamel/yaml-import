@@ -76,7 +76,7 @@
   "dependencies": {
     "ajv": "^6.10.0",
     "arg": "^4.1.0",
-    "cli-belt": "^0.3.1",
+    "cli-belt": "^1.0.0",
     "common-tags": "^1.8.0",
     "fs-readdir-recursive": "^1.1.0",
     "js-yaml": "^3.13.1",
