@@ -58,7 +58,7 @@
     "url": "https://github.com/rafamel/yaml-import/issues"
   },
   "devDependencies": {
-    "@pika/pack": "^0.4.0",
+    "@pika/pack": "^0.5.0",
     "@riseup/library": "^0.5.0",
     "@riseup/tooling": "^0.5.0",
     "@types/common-tags": "^1.8.0",
