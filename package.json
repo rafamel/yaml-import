@@ -64,7 +64,7 @@
     "@types/common-tags": "^1.8.0",
     "@types/fs-readdir-recursive": "^1.0.0",
     "@types/jest": "^25.1.2",
-    "@types/js-yaml": "^3.12.1",
+    "@types/js-yaml": "^4.0.0",
     "@types/json-schema": "^7.0.3",
     "@zerollup/ts-transform-paths": "^1.7.3",
     "coveralls": "^3.0.7",
@@ -79,7 +79,7 @@
     "cli-belt": "^0.3.1",
     "common-tags": "^1.8.0",
     "fs-readdir-recursive": "^1.1.0",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^4.0.0",
     "merge-strategies": "^0.1.1",
     "namify": "^0.1.3"
   },
