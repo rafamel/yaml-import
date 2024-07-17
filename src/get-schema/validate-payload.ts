@@ -1,6 +1,7 @@
+import type { JSONSchema7 } from 'json-schema';
 import Ajv from 'ajv';
-import { JSONSchema7 } from 'json-schema';
-import { IPayload } from '~/types';
+
+import type { IPayload } from '../types';
 
 const schema: JSONSchema7 = {
   type: 'object',

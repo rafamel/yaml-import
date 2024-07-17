@@ -1,5 +1,7 @@
-import validate from '~/get-schema/validate-payload';
-import { IPayload } from '~/types';
+import { expect, test } from 'vitest';
+
+import type { IPayload } from '../../src/types';
+import validate from '../../src/get-schema/validate-payload';
 
 test(`returns true`, () => {
   const items: IPayload[] = [

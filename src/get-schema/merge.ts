@@ -1,6 +1,7 @@
-import { TStrategy } from '~/types';
-import { shallow, merge as _merge, deep } from 'merge-strategies';
-import { DEFAULT_STRATEGY } from '~/constants';
+import { merge as _merge, deep, shallow } from 'merge-strategies';
+
+import type { TStrategy } from '../types';
+import { DEFAULT_STRATEGY } from '../constants';
 
 const strategies = {
   shallow,
@@ -15,7 +16,7 @@ export default function merge(
   if (strategy === 'sequence') return data.concat();
   const fn = strategies[strategy];
 
-  if (!fn) throw Error(`Strategy ${strategy} is not valid`);
+  if (!fn) throw new Error(`Strategy ${strategy} is not valid`);
   if (!data.length) return;
 
   let ans: any = data[0];

@@ -1,9 +1,13 @@
-import merge from '~/get-schema/merge';
+import { expect, test } from 'vitest';
+
+import merge from '../../src/get-schema/merge';
 
 test(`errors out on invalid strategy`, () => {
   expect(() =>
     merge([{}], 'invalid' as any)
-  ).toThrowErrorMatchingInlineSnapshot(`"Strategy invalid is not valid"`);
+  ).toThrowErrorMatchingInlineSnapshot(
+    `[Error: Strategy invalid is not valid]`
+  );
 });
 test(`returns data for sequence`, () => {
   expect(merge(['foo', 'bar'], 'sequence')).toEqual(['foo', 'bar']);
@@ -32,7 +36,7 @@ test(`shallow`, () => {
   ).toEqual({ foo: { bar: ['foobar'] }, bar: 'baz', baz: 'bar' });
 });
 test(`merge; merge is default`, () => {
-  ['merge' as 'merge', undefined].forEach((strategy) => {
+  ['merge' as const, undefined].forEach((strategy) => {
     expect(merge([{}, 'foo'], strategy)).toBe('foo');
     expect(
       merge(

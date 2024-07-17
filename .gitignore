@@ -1,25 +1,37 @@
 # Project Specific #
 ####################
-pkg
-build
-deploy
 lib
-dist
+pkg
 out
+dist
+build
+vendor
+deploy
+public
+coverage
 _test*
-.npmrc
+!**/deps/*.tgz
 
-# Node, Frameworks, Editors #
-#############################
-.cache
+# Environment Variables #
+#########################
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-coverage
+
+# Node, Frameworks, Editors #
+#############################
+.cache
+.vercel
+.tsup
+.pnp
+.pnp.js
+hint-report
 node_modules
-npm-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Compiled source #
 ###################
@@ -41,6 +53,7 @@ npm-debug.log
 *.jar
 *.rar
 *.tar
+*.tgz
 *.zip
 
 # Logs and databases #
@@ -52,10 +65,11 @@ npm-debug.log
 
 # OS generated files #
 ######################
+._*
+*.pem
 .DS_Store
 .DS_Store?
-._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
 Thumbs.db
+ehthumbs.db

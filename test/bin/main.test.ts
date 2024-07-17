@@ -1,16 +1,18 @@
 /* eslint-disable no-console */
-import pkg from '../../package.json';
-import main from '~/bin/main';
-import read from '~/read';
-import write from '~/write';
+import { type Mock, beforeEach, expect, test, vi } from 'vitest';
 import yaml from 'js-yaml';
 
-jest.mock('~/read');
-jest.mock('~/write');
-jest.mock('js-yaml');
-console.log = jest.fn();
+import main from '../../src/bin/main';
+import read from '../../src/read';
+import write from '../../src/write';
+import pkg from '../../package.json';
 
-const mocks: { [key: string]: jest.Mock } = {
+vi.mock('js-yaml');
+vi.mock('../../src/read');
+vi.mock('../../src/write');
+console.log = vi.fn();
+
+const mocks: { [key: string]: Mock } = {
   read,
   write,
   dump: yaml.dump,
@@ -29,19 +31,19 @@ test(`Shows help`, async () => {
   expect(mocks.write).not.toHaveBeenCalled();
   expect(mocks.console).toHaveBeenCalledTimes(1);
   expect(mocks.console.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "Import files and directories in YAML for a modular design
-    
+
     Usage:
       $ yimp [options]
-    
+
     Options:
       -i, --input <path>        Path to input file
       -o, --output <path>       Path to output file, optional
       -e, --ext <extensions>    Extensions, comma separated, optional
       -h, --help                Show help
       -v, --version             Show version number
-    
+
     Example:
       $ yimp -i input-file.yml -o output-file.yml -e yml,yaml,raml",
     ]
@@ -56,17 +58,17 @@ test(`Shows version`, async () => {
 });
 test(`Fails for unknown commands`, async () => {
   await expect(main(['foo'])).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Unexpected command: foo"`
+    `[Error: Unexpected command: foo]`
   );
 });
 test(`Fails for unknown flags`, async () => {
   await expect(main(['--foo'])).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Unknown or unexpected option: --foo"`
+    `[Error: Unknown or unexpected option: --foo]`
   );
 });
 test(`Fails wo/ --input`, async () => {
   await expect(main([])).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Input file path is required"`
+    `[Error: Input file path is required]`
   );
 });
 test(`Succeeds w/ --input`, async () => {
@@ -76,18 +78,18 @@ test(`Succeeds w/ --input`, async () => {
   expect(mocks.dump).toHaveBeenCalledTimes(1);
   expect(mocks.console).toHaveBeenCalledTimes(1);
   expect(mocks.read.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "/foo/bar/foo/bar",
-      Object {},
+      {},
     ]
   `);
   expect(mocks.dump.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       " READ ",
     ]
   `);
   expect(mocks.console.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "DUMP",
     ]
   `);
@@ -101,10 +103,10 @@ test(`Succeeds w/ absolute paths, --input --ext`, async () => {
   expect(mocks.dump).toHaveBeenCalledTimes(1);
   expect(mocks.console).toHaveBeenCalledTimes(1);
   expect(mocks.read.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "/foo/bar",
-      Object {
-        "ext": Array [
+      {
+        "ext": [
           ".yml",
           ".yaml",
           ".yaml",
@@ -114,12 +116,12 @@ test(`Succeeds w/ absolute paths, --input --ext`, async () => {
     ]
   `);
   expect(mocks.dump.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       " READ ",
     ]
   `);
   expect(mocks.console.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "DUMP",
     ]
   `);
@@ -133,10 +135,10 @@ test(`Succeeds w/ --input --output`, async () => {
   expect(mocks.dump).not.toHaveBeenCalled();
   expect(mocks.console).not.toHaveBeenCalled();
   expect(mocks.write.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "/foo/bar/foo/bar",
       "/foo/bar/bar/baz",
-      Object {},
+      {},
     ]
   `);
 });
@@ -149,11 +151,11 @@ test(`Succeeds w/ absolute paths, --input --output --ext`, async () => {
   expect(mocks.dump).not.toHaveBeenCalled();
   expect(mocks.console).not.toHaveBeenCalled();
   expect(mocks.write.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "/foo/bar",
       "/bar/baz",
-      Object {
-        "ext": Array [
+      {
+        "ext": [
           ".yml",
           ".yaml",
         ],

@@ -1,7 +1,9 @@
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
+
 import recursivedir from 'fs-readdir-recursive';
-import { IOptions, IFileDefinition } from '~/types';
+
+import type { IFileDefinition, IOptions } from '../types';
 import absolute from './absolute';
 
 export default function getFiles(
@@ -44,7 +46,7 @@ export function getFromDir(
     const parsed = path.parse(file);
     return (
       parsed.name[0] !== '.' &&
-      (!options.ext || options.ext.indexOf(parsed.ext) !== -1)
+      (!options.ext || options.ext.includes(parsed.ext))
     );
   });
 }

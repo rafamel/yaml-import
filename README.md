@@ -1,19 +1,15 @@
 # yaml-import
 
 [![Version](https://img.shields.io/npm/v/yaml-import.svg)](https://www.npmjs.com/package/yaml-import)
-[![Build Status](https://img.shields.io/travis/rafamel/yaml-import/master.svg)](https://travis-ci.org/rafamel/yaml-import)
-[![Coverage](https://img.shields.io/coveralls/rafamel/yaml-import/master.svg)](https://coveralls.io/github/rafamel/yaml-import)
-[![Dependencies](https://img.shields.io/david/rafamel/yaml-import.svg)](https://david-dm.org/rafamel/yaml-import)
-[![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/yaml-import.svg)](https://snyk.io/test/npm/yaml-import)
-[![License](https://img.shields.io/github/license/rafamel/yaml-import.svg)](https://github.com/rafamel/yaml-import/blob/master/LICENSE)
 [![Types](https://img.shields.io/npm/types/yaml-import.svg)](https://www.npmjs.com/package/yaml-import)
+[![License](https://img.shields.io/github/license/rafamel/yaml-import.svg)](https://github.com/rafamel/yaml-import/blob/master/LICENSE)
 
 > Import files and directories in *YAML* for a modular design
 
 ## Install
 
-* Global install -the `yimp` executable will be globally available: `npm install -g yaml-import`.
-* Local install -for programmatic usage: `npm install yaml-import`.
+* Local install for programmatic usage: `npm install yaml-import`.
+* Global install, so the `yimp` executable is globally available: `npm install -g yaml-import`.
 
 ## *YAML*
 
@@ -83,7 +79,7 @@ Takes in an object with fields:
 * `data`: **Optional.** Any additional data to be treated as coming from an additional last element of `paths` -that is, the content of `paths` will be merged with `data` with the chosen `strategy`.
 * `recursive`: **Optional,** *boolean.* Whether to recursively traverse directories when passed as `paths`. Default: `false`.
 
-```yaml
+```
 # These would be equivalent:
 !!import/merge
   - foo/foo.yml
@@ -163,7 +159,8 @@ Reads a *YAML* file and writes the output on a file.
 * `schemas`: **Optional,** *array.* *YAML* schemas to extend.
 
 ```javascript
-import path from 'path';
+import path from 'node:path';
+
 import { write } from 'yaml-import';
 
 write(
@@ -181,7 +178,8 @@ Reads a *YAML* file and returns the parsed object.
 * `schemas`: **Optional,** *array.* *YAML* schemas to extend.
 
 ```javascript
-import path from 'path';
+import path from 'node:path';
+
 import { read } from 'yaml-import';
 
 const content = read(path.join(__dirname, 'foo/root.yml'));
@@ -190,8 +188,9 @@ const content = read(path.join(__dirname, 'foo/root.yml'));
 We could write it later on with `js-yaml` and `fs`:
 
 ```javascript
+import fs from 'node:fs';
+
 import yaml from 'js-yaml';
-import fs from 'fs';
 
 // To YAML
 const text = yaml.dump(content);
@@ -208,13 +207,14 @@ For flexible usage with *js-yaml,* `getSchema` returns a `schema` you can pass t
 * `schemas`: **Optional,** *array.* *YAML* schemas to extend.
 
 ```javascript
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
+
 import yaml from 'js-yaml';
 import { getSchema } from 'yaml-import';
 
 const src = fs.readFileSync(path.join(__dirname, 'foo/root.yml'), 'utf8');
 const cwd = path.join(__dirname, 'foo');
 const schema = getSchema(cwd);
-const content = yaml.safeLoad(src, { schema: schema });
+const content = yaml.safeLoad(src, { schema });
 ```

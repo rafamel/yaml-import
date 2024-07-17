@@ -1,9 +1,11 @@
-import path from 'path';
-import yaml from 'js-yaml';
+import path from 'node:path';
+
+import type yaml from 'js-yaml';
 import namify from 'namify';
+
+import type { IOptions } from '../types';
+import read from '../read';
 import getFiles from './get-files';
-import read from '~/read';
-import { IOptions } from '~/types';
 
 export default function createTree(
   file: string,

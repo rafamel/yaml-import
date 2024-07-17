@@ -1,6 +1,7 @@
 import yaml from 'js-yaml';
-import { IOptions, IPayload } from '~/types';
-import read from '~/read';
+
+import type { IOptions, IPayload } from '../types';
+import read from '../read';
 import fetch from './fetch';
 import merge from './merge';
 import createTree from './create-tree';

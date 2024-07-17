@@ -1,6 +1,6 @@
-import { LoadOptions } from 'js-yaml';
+import type yaml from 'js-yaml';
 
-export interface IOptions extends LoadOptions {
+export interface IOptions extends yaml.LoadOptions {
   /**
    * List of extensions to use for directory imports. Defaults to `['.yml', '.yaml']`.
    */

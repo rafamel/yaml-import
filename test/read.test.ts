@@ -1,13 +1,16 @@
-import read from '~/read';
-import getSchema from '~/get-schema';
+import fs from 'node:fs';
+
+import { type Mock, beforeEach, expect, test, vi } from 'vitest';
 import yaml from 'js-yaml';
-import fs from 'fs';
 
-jest.mock('~/get-schema');
-jest.mock('js-yaml');
-jest.mock('fs');
+import read from '../src/read';
+import getSchema from '../src/get-schema';
 
-const mocks: { [key: string]: jest.Mock } = {
+vi.mock('node:fs');
+vi.mock('js-yaml');
+vi.mock('../src/get-schema');
+
+const mocks: { [key: string]: Mock } = {
   getSchema,
   load: yaml.load,
   safeLoad: yaml.safeLoad,
@@ -30,30 +33,30 @@ test(`succeeds w/ defaults`, () => {
   expect(mocks.load).not.toHaveBeenCalled();
 
   expect(mocks.readFileSync.mock.calls[0]).toMatchInlineSnapshot(`
-                                Array [
-                                  "foo/bar/baz.yml",
-                                  "utf8",
-                                ]
-                `);
+    [
+      "foo/bar/baz.yml",
+      "utf8",
+    ]
+  `);
   expect(mocks.getSchema.mock.calls[0]).toMatchInlineSnapshot(`
-            Array [
-              "foo/bar",
-              Object {
-                "safe": true,
-              },
-              undefined,
-            ]
-      `);
+    [
+      "foo/bar",
+      {
+        "safe": true,
+      },
+      undefined,
+    ]
+  `);
   expect(mocks.safeLoad.mock.calls[0]).toMatchInlineSnapshot(`
-                            Array [
-                              "FILE",
-                              Object {
-                                "filename": "foo/bar/baz.yml",
-                                "safe": true,
-                                "schema": "SCHEMA",
-                              },
-                            ]
-              `);
+    [
+      "FILE",
+      {
+        "filename": "foo/bar/baz.yml",
+        "safe": true,
+        "schema": "SCHEMA",
+      },
+    ]
+  `);
 });
 
 test(`succeeds w/ safe, passes options & schemas`, () => {
@@ -67,37 +70,37 @@ test(`succeeds w/ safe, passes options & schemas`, () => {
   expect(mocks.safeLoad).not.toHaveBeenCalled();
 
   expect(mocks.readFileSync.mock.calls[0]).toMatchInlineSnapshot(`
-                                Array [
-                                  "foo/bar/baz.yml",
-                                  "utf8",
-                                ]
-                `);
+    [
+      "foo/bar/baz.yml",
+      "utf8",
+    ]
+  `);
   expect(mocks.getSchema.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "foo/bar",
-      Object {
-        "ext": Array [
+      {
+        "ext": [
           ".yml",
         ],
         "safe": false,
       },
-      Array [
+      [
         "foo",
         "bar",
       ],
     ]
   `);
   expect(mocks.load.mock.calls[0]).toMatchInlineSnapshot(`
-        Array [
-          "FILE",
-          Object {
-            "ext": Array [
-              ".yml",
-            ],
-            "filename": "foo/bar/baz.yml",
-            "safe": false,
-            "schema": "SCHEMA",
-          },
-        ]
-    `);
+    [
+      "FILE",
+      {
+        "ext": [
+          ".yml",
+        ],
+        "filename": "foo/bar/baz.yml",
+        "safe": false,
+        "schema": "SCHEMA",
+      },
+    ]
+  `);
 });

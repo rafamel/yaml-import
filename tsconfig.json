@@ -1,17 +1,87 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
-  "extends": "./node_modules/@riseup/tooling/static/tsconfig.json",
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "~/*": ["src/*"]
-    },
-    "plugins": [
-      {
-        "transform": "@zerollup/ts-transform-paths"
-      }
-    ]
+    /* Build */
+    // Specify ECMAScript target version.
+    "target": "ES2022",
+    // Base directory to resolve non-absolute module names.
+    "baseUrl": null,
+    // Entries to re-map imports relative to 'baseUrl'.
+    "paths": {},
+    // Support TC39 stage 2 draft decorators.
+    "experimentalDecorators": false,
+    // Emit ECMAScript-standard-compliant class fields.
+    "useDefineForClassFields": true,
+    // Specify what JSX code is generated.
+    "jsx": "react",
+    // Specify JSX factory function.
+    "jsxFactory": "React.createElement",
+    // Specify JSX Fragment reference.
+    "jsxFragmentFactory": "React.Fragment",
+    // Enable ECMAScript strict mode.
+    "alwaysStrict": true,
+    // Don't transform/elide imports/exports not marked as type-only.
+    "verbatimModuleSyntax": true,
+
+    /* Type Checking */
+    // Specify files to include.
+    "lib": ["ES2022" /* "DOM", "DOM.Iterable", "DOM.AsyncIterable" */],
+    // Specify type declaration files to include.
+    "types": ["node"],
+    // Specify module system.
+    "module": "ESNext",
+    // Specify module resolution strategy.
+    "moduleResolution": "Bundler",
+    // Enable all strict type-checking options.
+    "strict": true,
+    // Skip type checks for libraries.
+    "skipLibCheck": true,
+    // Treat each file as a separate module.
+    "isolatedModules": true,
+    // Allow javascript files.
+    "allowJs": false,
+    // Include modules imported with '.json' extension.
+    "resolveJsonModule": true,
+    // Enable importing files with any extension with a declaration file.
+    "allowArbitraryExtensions": true,
+    // Allow imports to include TypeScript file extensions.
+    "allowImportingTsExtensions": true,
+    // Emit interoperability between CommonJS and ES.
+    "esModuleInterop": false,
+    // Force filename consistent casing.
+    "forceConsistentCasingInFileNames": true,
+    // Enforces using indexed accessors for keys declared using an indexed type.
+    "noPropertyAccessFromIndexSignature": false,
+    // Error on implied 'any' types.
+    "noImplicitAny": true,
+    // Enable strict null checks.
+    "strictNullChecks": true,
+    // Enable strict checking of function types.
+    "strictFunctionTypes": true,
+    // Strict checking of property initialization in classes.
+    "strictPropertyInitialization": false,
+    // Error on 'this' with an implied 'any' type.
+    "noImplicitThis": true,
+    // Report errors on unused locals.
+    "noUnusedLocals": true,
+    // Report errors on unused parameters.
+    "noUnusedParameters": true,
+    // Error when a function doesn't always return a value.
+    "noImplicitReturns": false,
+    // Error for fallthrough cases in switch statement.
+    "noFallthroughCasesInSwitch": false,
+
+    /* Emit Types */
+    "noEmit": true,
+    // Do not emit comments to output.
+    "removeComments": false,
+    // Generates corresponding '.map' file.
+    "sourceMap": false,
+    // Emit a single file with source maps.
+    "inlineSourceMap": true,
+    // Emit the source alongside the sourcemaps within a single file.
+    "inlineSources": true
   }
 }

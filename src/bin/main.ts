@@ -1,11 +1,14 @@
 /* eslint-disable no-console */
-import path from 'path';
-import { loadPackage, flags, safePairs } from 'cli-belt';
+import path from 'node:path';
+import process from 'node:process';
+
+import { flags, loadPackage, safePairs } from 'cli-belt';
 import { stripIndent as indent } from 'common-tags';
 import arg from 'arg';
 import yaml from 'js-yaml';
-import read from '~/read';
-import write from '~/write';
+
+import read from '../read';
+import write from '../write';
 
 export default async function main(argv: string[]): Promise<void> {
   const pkg = await loadPackage(__dirname, { title: true });
@@ -44,11 +47,11 @@ export default async function main(argv: string[]): Promise<void> {
   if (cmd['--version']) return console.log(pkg.version);
   if (cmd._.length) {
     console.log(help + '\n');
-    throw Error(`Unexpected command: ${cmd._[0]}`);
+    throw new Error(`Unexpected command: ${cmd._[0]}`);
   }
   if (!cmd['--input']) {
     console.log(help + '\n');
-    throw Error(`Input file path is required`);
+    throw new Error(`Input file path is required`);
   }
 
   const input = path.isAbsolute(cmd['--input'])

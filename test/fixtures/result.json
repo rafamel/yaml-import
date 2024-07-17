@@ -139,7 +139,10 @@
       },
       { "last": "foo" }
     ],
-    "arr": [{ "key": "foo", "value": "foo" }, { "key": "bar", "value": "bar" }],
+    "arr": [
+      { "key": "foo", "value": "foo" },
+      { "key": "bar", "value": "bar" }
+    ],
     "falsy": false
   },
   "extensions": [5, "foo"],

@@ -1,5 +1,8 @@
-import path from 'path';
-import read from '~/read';
+import path from 'node:path';
+
+import { expect, test } from 'vitest';
+
+import read from '../src/read';
 import json from './fixtures/result.json';
 
 const root = path.join(__dirname, 'fixtures/root.yml');

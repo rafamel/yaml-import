@@ -1,7 +1,9 @@
-import fs from 'fs';
+import fs from 'node:fs';
+
 import yaml from 'js-yaml';
+
+import type { IOptions } from './types';
 import read from './read';
-import { IOptions } from './types';
 
 export default function write(
   input: string,

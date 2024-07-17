@@ -1,13 +1,16 @@
-import write from '~/write';
-import read from '~/read';
+import fs from 'node:fs';
+
+import { type Mock, beforeEach, expect, test, vi } from 'vitest';
 import yaml from 'js-yaml';
-import fs from 'fs';
 
-jest.mock('~/read');
-jest.mock('js-yaml');
-jest.mock('fs');
+import write from '../src/write';
+import read from '../src/read';
 
-const mocks: { [key: string]: jest.Mock } = {
+vi.mock('node:fs');
+vi.mock('js-yaml');
+vi.mock('../src/read');
+
+const mocks: { [key: string]: Mock } = {
   read,
   dump: yaml.dump,
   writeFileSync: fs.writeFileSync
@@ -25,23 +28,23 @@ test(`succeeds w/ defaults`, () => {
   expect(mocks.dump).toHaveBeenCalledTimes(1);
   expect(mocks.writeFileSync).toHaveBeenCalledTimes(1);
   expect(mocks.read.mock.calls[0]).toMatchInlineSnapshot(`
-        Array [
-          "foo/bar/baz.yml",
-          undefined,
-          undefined,
-        ]
-    `);
+    [
+      "foo/bar/baz.yml",
+      undefined,
+      undefined,
+    ]
+  `);
   expect(mocks.dump.mock.calls[0]).toMatchInlineSnapshot(`
-        Array [
-          "READ",
-        ]
-    `);
+    [
+      "READ",
+    ]
+  `);
   expect(mocks.writeFileSync.mock.calls[0]).toMatchInlineSnapshot(`
-        Array [
-          "foo/bar/foobar.yml",
-          "DUMP",
-        ]
-    `);
+    [
+      "foo/bar/foobar.yml",
+      "DUMP",
+    ]
+  `);
 });
 test(`succeeds; passes options & schemas`, () => {
   expect(
@@ -54,26 +57,26 @@ test(`succeeds; passes options & schemas`, () => {
   expect(mocks.dump).toHaveBeenCalledTimes(1);
   expect(mocks.writeFileSync).toHaveBeenCalledTimes(1);
   expect(mocks.read.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "foo/bar/baz.yml",
-      Object {
+      {
         "safe": true,
       },
-      Array [
+      [
         "foo",
         "bar",
       ],
     ]
   `);
   expect(mocks.dump.mock.calls[0]).toMatchInlineSnapshot(`
-        Array [
-          "READ",
-        ]
-    `);
+    [
+      "READ",
+    ]
+  `);
   expect(mocks.writeFileSync.mock.calls[0]).toMatchInlineSnapshot(`
-        Array [
-          "foo/bar/foobar.yml",
-          "DUMP",
-        ]
-    `);
+    [
+      "foo/bar/foobar.yml",
+      "DUMP",
+    ]
+  `);
 });

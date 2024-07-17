@@ -1,4 +1,6 @@
-import absolute from '~/get-schema/absolute';
+import { expect, test } from 'vitest';
+
+import absolute from '../../src/get-schema/absolute';
 
 test(`returns relative`, () => {
   expect(absolute({ cwd: '/foo', file: 'bar.yml' })).toBe('/foo/bar.yml');

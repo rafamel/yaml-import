@@ -1,8 +1,10 @@
-import path from 'path';
-import yaml from 'js-yaml';
-import { IOptions, IPayload } from '~/types';
+import path from 'node:path';
+
+import type yaml from 'js-yaml';
+
+import type { IOptions, IPayload } from '../types';
+import read from '../read';
 import getFiles from './get-files';
-import read from '~/read';
 
 export default function fetch(
   payload: IPayload,

@@ -43,8 +43,7 @@ payload:
   falsy: !!import/payload
     strategy: merge
     paths: ./arr.yml
-    data:
-      false
+    data: false
 extensions: !!import/sequence [./scalar]
 trees:
   plain: !!import/tree
@@ -53,13 +52,10 @@ trees:
     paths: ./foo
     recursive: true
   multiple: !!import/tree
-    strategy: 'deep'
+    strategy: deep
     paths:
       - ./foo/bar
       - ./foo/baz
     data:
       a:
         baz: !!import/single ./scalar/num.yml
-  
-  
-
