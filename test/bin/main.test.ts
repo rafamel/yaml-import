@@ -63,7 +63,7 @@ test(`Fails for unknown commands`, async () => {
 });
 test(`Fails for unknown flags`, async () => {
   await expect(main(['--foo'])).rejects.toThrowErrorMatchingInlineSnapshot(
-    `[Error: Unknown or unexpected option: --foo]`
+    `[ArgError: unknown or unexpected option: --foo]`
   );
 });
 test(`Fails wo/ --input`, async () => {

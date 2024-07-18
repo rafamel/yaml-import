@@ -46,12 +46,9 @@ test(`succeeds w/ defaults`, () => {
     ]
   `);
 });
-test(`succeeds; passes options & schemas`, () => {
+test(`succeeds w/ options & schemas`, () => {
   expect(
-    write('foo/bar/baz.yml', 'foo/bar/foobar.yml', { safe: true }, [
-      'foo',
-      'bar'
-    ])
+    write('foo/bar/baz.yml', 'foo/bar/foobar.yml', { ext: [] }, 'foo' as any)
   ).toBeUndefined();
   expect(mocks.read).toHaveBeenCalledTimes(1);
   expect(mocks.dump).toHaveBeenCalledTimes(1);
@@ -60,12 +57,9 @@ test(`succeeds; passes options & schemas`, () => {
     [
       "foo/bar/baz.yml",
       {
-        "safe": true,
+        "ext": [],
       },
-      [
-        "foo",
-        "bar",
-      ],
+      "foo",
     ]
   `);
   expect(mocks.dump.mock.calls[0]).toMatchInlineSnapshot(`

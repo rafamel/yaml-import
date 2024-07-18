@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import type yaml from 'js-yaml';
+import type { Schema } from 'js-yaml';
 import namify from 'namify';
 
 import type { IOptions } from '../types';
@@ -11,7 +11,7 @@ export default function createTree(
   file: string,
   directory: string,
   options: IOptions,
-  schemas: yaml.Schema[],
+  schema: Schema,
   recursive?: boolean
 ): any {
   const obj: any = {};
@@ -19,7 +19,7 @@ export default function createTree(
     const content = read(
       path.join(item.cwd, item.directory, item.name),
       options,
-      schemas
+      schema
     );
     // Get keys
     let keys = path.join(item.directory, item.name).split(path.sep);

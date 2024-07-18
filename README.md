@@ -146,7 +146,7 @@ Example:
 
 ### Programatic Usage
 
-#### `write(input, output, options?, schemas?)`
+#### `write(input, output, options?, schema?)`
 
 Reads a *YAML* file and writes the output on a file.
 
@@ -154,9 +154,8 @@ Reads a *YAML* file and writes the output on a file.
 * `output`: **Required,** *string*. Path for the output file.
 * `options` **Optional,** *object:*
   * `ext`: **Optional,** *string[].* List of extensions to use for directory imports. Default: `['.yml', '.yaml']`.
-  * `safe`: **Optional,** *boolean*. Whether to use `safeLoad` or `load` when loading *YAML* files via [*js-yaml*](https://www.npmjs.com/package/js-yaml). Default: `true`.
-  * [All other options taken by *js-yaml*](https://github.com/nodeca/js-yaml#safeload-string---options-), except `schema`.
-* `schemas`: **Optional,** *array.* *YAML* schemas to extend.
+  * [All other options taken by *js-yaml*](https://github.com/nodeca/js-yaml/blob/master/README.md#load-string---options-), except `schema`.
+* `schema`: **Optional.** *YAML* schema to extend.
 
 ```javascript
 import path from 'node:path';
@@ -169,13 +168,13 @@ write(
 );
 ```
 
-#### `read(input, options?, schemas?)`
+#### `read(input, options?, schema?)`
 
 Reads a *YAML* file and returns the parsed object.
 
 * `input`: **Required,** *string.* Path of the file to read.
 * `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas).
-* `schemas`: **Optional,** *array.* *YAML* schemas to extend.
+* `schema`: **Optional.** *YAML* schema to extend.
 
 ```javascript
 import path from 'node:path';
@@ -190,10 +189,10 @@ We could write it later on with `js-yaml` and `fs`:
 ```javascript
 import fs from 'node:fs';
 
-import yaml from 'js-yaml';
+import { dump } from 'js-yaml';
 
 // To YAML
-const text = yaml.dump(content);
+const text = dump(content);
 // Write to file
 fs.writeFileSync(path.join(__dirname, 'out/yaml.yml'), text);
 ```
@@ -204,17 +203,17 @@ For flexible usage with *js-yaml,* `getSchema` returns a `schema` you can pass t
 
 * `cwd`: **Required,** *string.* Base directory to read imported files from.
 * `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas). Used when files to import are loaded.
-* `schemas`: **Optional,** *array.* *YAML* schemas to extend.
+* `schema`: **Optional.** *YAML* schema to extend.
 
 ```javascript
 import path from 'node:path';
 import fs from 'node:fs';
 
-import yaml from 'js-yaml';
+import { load } from 'js-yaml';
 import { getSchema } from 'yaml-import';
 
 const src = fs.readFileSync(path.join(__dirname, 'foo/root.yml'), 'utf8');
 const cwd = path.join(__dirname, 'foo');
 const schema = getSchema(cwd);
-const content = yaml.safeLoad(src, { schema });
+const content = load(src, { schema });
 ```

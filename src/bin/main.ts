@@ -1,11 +1,10 @@
-/* eslint-disable no-console */
 import path from 'node:path';
 import process from 'node:process';
 
 import { flags, loadPackage, safePairs } from 'cli-belt';
 import { stripIndent as indent } from 'common-tags';
 import arg from 'arg';
-import yaml from 'js-yaml';
+import { dump } from 'js-yaml';
 
 import read from '../read';
 import write from '../write';
@@ -14,7 +13,7 @@ export default async function main(argv: string[]): Promise<void> {
   const pkg = await loadPackage(__dirname, { title: true });
 
   const help = indent`
-    ${pkg.description ? pkg.description : ''}
+    ${pkg.description || ''}
 
     Usage:
       $ yimp [options]
@@ -41,7 +40,11 @@ export default async function main(argv: string[]): Promise<void> {
   const { options: base, aliases } = flags(help);
   safePairs(types, base, { fail: true, bidirectional: true });
   Object.assign(types, aliases);
-  const cmd = arg(types, { argv, permissive: false, stopAtPositional: true });
+  const cmd = arg(types, {
+    argv,
+    permissive: false,
+    stopAtPositional: true
+  });
 
   if (cmd['--help']) return console.log(help);
   if (cmd['--version']) return console.log(pkg.version);
@@ -71,7 +74,7 @@ export default async function main(argv: string[]): Promise<void> {
     : {};
 
   if (!output) {
-    console.log(yaml.dump(read(input, options)).trim());
+    console.log(dump(read(input, options)).trim());
   } else {
     write(input, output, options);
   }
