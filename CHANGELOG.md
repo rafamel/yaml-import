@@ -1,3 +1,35 @@
+
+
+# [3.0.0](https://github.com/rafamel/yaml-import/compare/v2.0.0...v3.0.0) (2024-07-18)
+
+
+### Bug Fixes
+
+* update dependencies ([5ab4e06](https://github.com/rafamel/yaml-import/commit/5ab4e065bc5c2d4193adec9aed6870e410e107f6))
+
+
+### chore
+
+* update setup ([de7b44e](https://github.com/rafamel/yaml-import/commit/de7b44e739670cd315f779cde78546922c957f3b))
+
+
+### Code Refactoring
+
+* complete project refactor ([79e0cf0](https://github.com/rafamel/yaml-import/commit/79e0cf09de57247ac56b1608263d4805776fe63e))
+
+
+### BREAKING CHANGES
+
+* read, write, and getSchema no longer take a schema argument, as it can
+be passed via Options.schema; internal type definitions are no longer exported; IOptions
+type has been renamed to Options; the Options.ext field has been renamed to
+Options.extensions; the CLI no longer takes the -i/--input flag, which has been replaced
+by an argument.
+* No longer takes a safe option; the previous safe (and default) behavior is now
+always applied. Addionally, the read, write, and getSchema functions only take one Schema as an
+argument, where previously they took an array of Schemas.
+* yaml-import is now a pure ESM package; require node >= 22
+
 # [2.0.0](https://github.com/rafamel/yaml-import/compare/v1.0.0...v2.0.0) (2019-05-23)
 
 
@@ -77,6 +109,3 @@ you'll need to change all your imports in order to upgrade.
 
 
 ## 0.1.1 (2017-10-19)
-
-
-
