@@ -3,17 +3,17 @@ import fs from 'node:fs';
 
 import recursivedir from 'fs-readdir-recursive';
 
-import type { IFileDefinition, IOptions } from '../types';
-import absolute from './absolute';
+import type { Options } from '../definitions';
+import type { FileDefinition } from './definitions';
 
-export default function getFiles(
+export function getFiles(
   paths: string[],
   cwd: string,
-  options: IOptions,
-  recursive?: boolean
-): IFileDefinition[] {
-  return paths.reduce((acc: IFileDefinition[], file: string) => {
-    file = absolute({ file, cwd });
+  recursive: boolean,
+  options: Options
+): FileDefinition[] {
+  return paths.reduce((acc: FileDefinition[], file: string) => {
+    file = path.resolve(cwd, file);
     const stat = fs.statSync(file);
     return stat.isDirectory()
       ? acc.concat(
@@ -33,7 +33,7 @@ export default function getFiles(
 
 export function getFromDir(
   absolute: string,
-  options: IOptions,
+  options: Options,
   recursive?: boolean
 ): string[] {
   const paths = recursive
@@ -43,10 +43,10 @@ export function getFromDir(
       });
 
   return paths.filter((file) => {
-    const parsed = path.parse(file);
+    const { name, ext } = path.parse(file);
     return (
-      parsed.name[0] !== '.' &&
-      (!options.ext || options.ext.includes(parsed.ext))
+      name[0] !== '.' &&
+      (!options.extensions || options.extensions.includes(ext))
     );
   });
 }

@@ -6,31 +6,32 @@ import { stripIndent as indent } from 'common-tags';
 import arg from 'arg';
 import { dump } from 'js-yaml';
 
-import read from '../read';
-import write from '../write';
+import type { Options } from '../definitions';
+import { read } from '../read';
+import { write } from '../write';
 
-export default async function main(argv: string[]): Promise<void> {
+export async function main(
+  argv: string[],
+  print: (data: any) => void
+): Promise<void> {
   const pkg = await loadPackage(__dirname, { title: true });
-
   const help = indent`
     ${pkg.description || ''}
 
     Usage:
-      $ yimp [options]
+      $ yimp file [options]
 
     Options:
-      -i, --input <path>        Path to input file
       -o, --output <path>       Path to output file, optional
       -e, --ext <extensions>    Extensions, comma separated, optional
       -h, --help                Show help
       -v, --version             Show version number
 
     Example:
-      $ yimp -i input-file.yml -o output-file.yml -e yml,yaml,raml
+      $ yimp source.yml -o destination.yml -e yml,yaml,raml
   `;
 
   const types = {
-    '--input': String,
     '--output': String,
     '--ext': String,
     '--help': Boolean,
@@ -43,39 +44,34 @@ export default async function main(argv: string[]): Promise<void> {
   const cmd = arg(types, {
     argv,
     permissive: false,
-    stopAtPositional: true
+    stopAtPositional: false
   });
 
-  if (cmd['--help']) return console.log(help);
-  if (cmd['--version']) return console.log(pkg.version);
-  if (cmd._.length) {
-    console.log(help + '\n');
-    throw new Error(`Unexpected command: ${cmd._[0]}`);
-  }
-  if (!cmd['--input']) {
-    console.log(help + '\n');
-    throw new Error(`Input file path is required`);
+  if (cmd['--help']) return print(help);
+  if (cmd['--version']) return print(pkg.version);
+  if (!cmd._.length) {
+    print(help + '\n');
+    throw new Error(`A source file is required`);
+  } else if (cmd._.length > 1) {
+    print(help + '\n');
+    throw new Error(`No more than once source file is allowed`);
   }
 
-  const input = path.isAbsolute(cmd['--input'])
-    ? cmd['--input']
-    : path.join(process.cwd(), cmd['--input']);
-  const output = cmd['--output']
-    ? path.isAbsolute(cmd['--output'])
-      ? cmd['--output']
-      : path.join(process.cwd(), cmd['--output'])
+  const source = path.resolve(process.cwd(), cmd._[0]);
+  const destination = cmd['--output']
+    ? path.resolve(process.cwd(), cmd['--output'])
     : undefined;
-  const options = cmd['--ext']
+  const options: Options = cmd['--ext']
     ? {
-        ext: cmd['--ext']
+        extensions: cmd['--ext']
           .split(',')
           .map((ext) => (ext[0] === '.' ? ext : `.${ext}`))
       }
     : {};
 
-  if (!output) {
-    console.log(dump(read(input, options)).trim());
+  if (destination) {
+    write(source, destination, options);
   } else {
-    write(input, output, options);
+    print(dump(read(source, options)).trim());
   }
 }

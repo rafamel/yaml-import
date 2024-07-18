@@ -1,10 +1,10 @@
 import { expect, test } from 'vitest';
 
-import type { IPayload } from '../../src/types';
-import validate from '../../src/get-schema/validate-payload';
+import type { Payload } from '../../src/get-schema/definitions';
+import { validatePayload } from '../../src/get-schema/validate-payload';
 
 test(`returns true`, () => {
-  const items: IPayload[] = [
+  const items: Payload[] = [
     { paths: 'foo' },
     { paths: ['foo'] },
     { paths: 'foo', strategy: 'sequence' },
@@ -17,10 +17,10 @@ test(`returns true`, () => {
     { paths: 'foo', recursive: true },
     { paths: 'foo', recursive: false }
   ];
-  items.forEach((item) => expect(validate(item)).toBe(true));
+  items.forEach((item) => expect(validatePayload(item)).toBe(true));
 });
 test(`returns false`, () => {
-  const items: IPayload[] = [
+  const items: Payload[] = [
     { paths: '' },
     { paths: [] },
     { paths: [''] },
@@ -28,5 +28,5 @@ test(`returns false`, () => {
     { paths: 'foo', foo: 'bar' } as any,
     { paths: 'foo', recursive: 'foo' }
   ];
-  items.forEach((item) => expect(validate(item)).toBe(false));
+  items.forEach((item) => expect(validatePayload(item)).toBe(false));
 });

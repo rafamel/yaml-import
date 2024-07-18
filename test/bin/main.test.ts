@@ -1,22 +1,20 @@
-/* eslint-disable no-console */
 import { type Mock, beforeEach, expect, test, vi } from 'vitest';
 import yaml from 'js-yaml';
 
-import main from '../../src/bin/main';
-import read from '../../src/read';
-import write from '../../src/write';
+import { main } from '../../src/bin/main';
+import { read } from '../../src/read';
+import { write } from '../../src/write';
 import pkg from '../../package.json';
 
 vi.mock('js-yaml');
 vi.mock('../../src/read');
 vi.mock('../../src/write');
-console.log = vi.fn();
 
+const noop = () => null;
 const mocks: { [key: string]: Mock } = {
   read,
   write,
-  dump: yaml.dump,
-  console: console.log
+  dump: yaml.dump
 } as any;
 
 process.cwd = () => '/foo/bar';
@@ -26,57 +24,63 @@ mocks.dump.mockImplementation(() => 'DUMP');
 beforeEach(() => Object.values(mocks).forEach((mock) => mock.mockClear()));
 
 test(`Shows help`, async () => {
-  await expect(main(['--help'])).resolves.toBeUndefined();
+  const fn = vi.fn();
+  await expect(main(['--help'], fn)).resolves.toBeUndefined();
   expect(mocks.read).not.toHaveBeenCalled();
   expect(mocks.write).not.toHaveBeenCalled();
-  expect(mocks.console).toHaveBeenCalledTimes(1);
-  expect(mocks.console.mock.calls[0]).toMatchInlineSnapshot(`
+  expect(fn).toHaveBeenCalledTimes(1);
+  expect(fn.mock.calls[0]).toMatchInlineSnapshot(`
     [
       "Import files and directories in YAML for a modular design
 
     Usage:
-      $ yimp [options]
+      $ yimp file [options]
 
     Options:
-      -i, --input <path>        Path to input file
       -o, --output <path>       Path to output file, optional
       -e, --ext <extensions>    Extensions, comma separated, optional
       -h, --help                Show help
       -v, --version             Show version number
 
     Example:
-      $ yimp -i input-file.yml -o output-file.yml -e yml,yaml,raml",
+      $ yimp source.yml -o destination.yml -e yml,yaml,raml",
     ]
   `);
 });
 test(`Shows version`, async () => {
-  await expect(main(['--version'])).resolves.toBeUndefined();
+  const fn = vi.fn();
+  await expect(main(['--version'], fn)).resolves.toBeUndefined();
   expect(mocks.read).not.toHaveBeenCalled();
   expect(mocks.write).not.toHaveBeenCalled();
-  expect(mocks.console).toHaveBeenCalledTimes(1);
-  expect(mocks.console.mock.calls[0]).toEqual([pkg.version]);
-});
-test(`Fails for unknown commands`, async () => {
-  await expect(main(['foo'])).rejects.toThrowErrorMatchingInlineSnapshot(
-    `[Error: Unexpected command: foo]`
-  );
+  expect(fn).toHaveBeenCalledTimes(1);
+  expect(fn.mock.calls[0]).toEqual([pkg.version]);
 });
 test(`Fails for unknown flags`, async () => {
-  await expect(main(['--foo'])).rejects.toThrowErrorMatchingInlineSnapshot(
+  await expect(
+    main(['--foo'], noop)
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
     `[ArgError: unknown or unexpected option: --foo]`
   );
 });
-test(`Fails wo/ --input`, async () => {
-  await expect(main([])).rejects.toThrowErrorMatchingInlineSnapshot(
-    `[Error: Input file path is required]`
+test(`Fails wo/ source file`, async () => {
+  await expect(main([], noop)).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: A source file is required]`
   );
 });
-test(`Succeeds w/ --input`, async () => {
-  await expect(main('--input foo/bar'.split(' '))).resolves.toBeUndefined();
+test(`Fails w/ extra source files`, async () => {
+  await expect(
+    main(['foo', 'bar'], noop)
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `[Error: No more than once source file is allowed]`
+  );
+});
+test(`Succeeds w/ source file`, async () => {
+  const fn = vi.fn();
+  await expect(main('foo/bar'.split(' '), fn)).resolves.toBeUndefined();
   expect(mocks.write).not.toHaveBeenCalled();
   expect(mocks.read).toHaveBeenCalledTimes(1);
   expect(mocks.dump).toHaveBeenCalledTimes(1);
-  expect(mocks.console).toHaveBeenCalledTimes(1);
+  expect(fn).toHaveBeenCalledTimes(1);
   expect(mocks.read.mock.calls[0]).toMatchInlineSnapshot(`
     [
       "/foo/bar/foo/bar",
@@ -88,25 +92,26 @@ test(`Succeeds w/ --input`, async () => {
       " READ ",
     ]
   `);
-  expect(mocks.console.mock.calls[0]).toMatchInlineSnapshot(`
+  expect(fn.mock.calls[0]).toMatchInlineSnapshot(`
     [
       "DUMP",
     ]
   `);
 });
-test(`Succeeds w/ absolute paths, --input --ext`, async () => {
+test(`Succeeds w/ absolute paths, source file, --ext`, async () => {
+  const fn = vi.fn();
   await expect(
-    main('--input /foo/bar --ext yml,yaml,.yaml,.yml'.split(' '))
+    main('/foo/bar --ext yml,yaml,.yaml,.yml'.split(' '), fn)
   ).resolves.toBeUndefined();
   expect(mocks.write).not.toHaveBeenCalled();
   expect(mocks.read).toHaveBeenCalledTimes(1);
   expect(mocks.dump).toHaveBeenCalledTimes(1);
-  expect(mocks.console).toHaveBeenCalledTimes(1);
+  expect(fn).toHaveBeenCalledTimes(1);
   expect(mocks.read.mock.calls[0]).toMatchInlineSnapshot(`
     [
       "/foo/bar",
       {
-        "ext": [
+        "extensions": [
           ".yml",
           ".yaml",
           ".yaml",
@@ -120,20 +125,21 @@ test(`Succeeds w/ absolute paths, --input --ext`, async () => {
       " READ ",
     ]
   `);
-  expect(mocks.console.mock.calls[0]).toMatchInlineSnapshot(`
+  expect(fn.mock.calls[0]).toMatchInlineSnapshot(`
     [
       "DUMP",
     ]
   `);
 });
-test(`Succeeds w/ --input --output`, async () => {
+test(`Succeeds w/ source file, --output`, async () => {
+  const fn = vi.fn();
   await expect(
-    main('--input foo/bar --output bar/baz'.split(' '))
+    main('foo/bar --output bar/baz'.split(' '), fn)
   ).resolves.toBeUndefined();
   expect(mocks.write).toHaveBeenCalledTimes(1);
   expect(mocks.read).not.toHaveBeenCalled();
   expect(mocks.dump).not.toHaveBeenCalled();
-  expect(mocks.console).not.toHaveBeenCalled();
+  expect(fn).not.toHaveBeenCalled();
   expect(mocks.write.mock.calls[0]).toMatchInlineSnapshot(`
     [
       "/foo/bar/foo/bar",
@@ -142,20 +148,21 @@ test(`Succeeds w/ --input --output`, async () => {
     ]
   `);
 });
-test(`Succeeds w/ absolute paths, --input --output --ext`, async () => {
+test(`Succeeds w/ absolute paths, source file, --output, --ext`, async () => {
+  const fn = vi.fn();
   await expect(
-    main('--input /foo/bar --output /bar/baz --ext .yml,yaml'.split(' '))
+    main('/foo/bar --output /bar/baz --ext .yml,yaml'.split(' '), fn)
   ).resolves.toBeUndefined();
   expect(mocks.write).toHaveBeenCalledTimes(1);
   expect(mocks.read).not.toHaveBeenCalled();
   expect(mocks.dump).not.toHaveBeenCalled();
-  expect(mocks.console).not.toHaveBeenCalled();
+  expect(fn).not.toHaveBeenCalled();
   expect(mocks.write.mock.calls[0]).toMatchInlineSnapshot(`
     [
       "/foo/bar",
       "/bar/baz",
       {
-        "ext": [
+        "extensions": [
           ".yml",
           ".yaml",
         ],

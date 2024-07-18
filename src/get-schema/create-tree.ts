@@ -1,25 +1,22 @@
 import path from 'node:path';
 
-import type { Schema } from 'js-yaml';
 import namify from 'namify';
 
-import type { IOptions } from '../types';
-import read from '../read';
-import getFiles from './get-files';
+import type { Options } from '../definitions';
+import { read } from '../read';
+import { getFiles } from './get-files';
 
-export default function createTree(
+export function createTree(
   file: string,
   directory: string,
-  options: IOptions,
-  schema: Schema,
-  recursive?: boolean
+  recursive: boolean,
+  options: Options
 ): any {
   const obj: any = {};
-  getFiles([file], directory, options, recursive).forEach((item) => {
+  getFiles([file], directory, recursive, options).forEach((item) => {
     const content = read(
       path.join(item.cwd, item.directory, item.name),
-      options,
-      schema
+      options
     );
     // Get keys
     let keys = path.join(item.directory, item.name).split(path.sep);

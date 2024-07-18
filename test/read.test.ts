@@ -3,8 +3,8 @@ import fs from 'node:fs';
 import { type Mock, beforeEach, expect, test, vi } from 'vitest';
 import yaml from 'js-yaml';
 
-import read from '../src/read';
-import getSchema from '../src/get-schema';
+import { read } from '../src/read';
+import { getSchema } from '../src/get-schema';
 
 vi.mock('node:fs');
 vi.mock('js-yaml');
@@ -39,7 +39,6 @@ test(`succeeds w/ defaults`, () => {
     [
       "foo/bar",
       undefined,
-      undefined,
     ]
   `);
   expect(mocks.load.mock.calls[0]).toMatchInlineSnapshot(`
@@ -55,7 +54,7 @@ test(`succeeds w/ defaults`, () => {
 
 test(`succeeds w/ options & schemas`, () => {
   expect(
-    read('foo/bar/baz.yml', { ext: ['.yml'] }, 'foo' as any)
+    read('foo/bar/baz.yml', { extensions: ['.yml'], schema: 'foo' as any })
   ).toMatchInlineSnapshot(`"LOAD"`);
 
   expect(mocks.readFileSync).toHaveBeenCalledTimes(1);
@@ -72,18 +71,18 @@ test(`succeeds w/ options & schemas`, () => {
     [
       "foo/bar",
       {
-        "ext": [
+        "extensions": [
           ".yml",
         ],
+        "schema": "foo",
       },
-      "foo",
     ]
   `);
   expect(mocks.load.mock.calls[0]).toMatchInlineSnapshot(`
     [
       "FILE",
       {
-        "ext": [
+        "extensions": [
           ".yml",
         ],
         "filename": "foo/bar/baz.yml",

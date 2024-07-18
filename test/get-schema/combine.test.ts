@@ -1,31 +1,31 @@
 import { expect, test } from 'vitest';
 
-import merge from '../../src/get-schema/merge';
+import { combine } from '../../src/get-schema/combine';
 
 test(`errors out on invalid strategy`, () => {
-  expect(() =>
-    merge([{}], 'invalid' as any)
-  ).toThrowErrorMatchingInlineSnapshot(
+  expect(() => {
+    combine([{}], 'invalid' as any);
+  }).toThrowErrorMatchingInlineSnapshot(
     `[Error: Strategy invalid is not valid]`
   );
 });
 test(`returns data for sequence`, () => {
-  expect(merge(['foo', 'bar'], 'sequence')).toEqual(['foo', 'bar']);
-  expect(merge([], 'sequence')).toEqual([]);
+  expect(combine(['foo', 'bar'], 'sequence')).toEqual(['foo', 'bar']);
+  expect(combine([], 'sequence')).toEqual([]);
 });
 test(`doesn't return the same object for sequence`, () => {
   const arr = ['foo', 'bar'];
-  expect(merge(arr, 'sequence')).not.toBe(arr);
+  expect(combine(arr, 'sequence')).not.toBe(arr);
 });
 test(`returns undefined wo/ data for shallow, merge, deep`, () => {
-  expect(merge([], 'shallow')).toBeUndefined();
-  expect(merge([], 'merge')).toBeUndefined();
-  expect(merge([], 'deep')).toBeUndefined();
+  expect(combine([], 'shallow')).toBeUndefined();
+  expect(combine([], 'merge')).toBeUndefined();
+  expect(combine([], 'deep')).toBeUndefined();
 });
 test(`shallow`, () => {
-  expect(merge([{}, 'foo'], 'shallow')).toBe('foo');
+  expect(combine([{}, 'foo'], 'shallow')).toBe('foo');
   expect(
-    merge(
+    combine(
       [
         { foo: { bar: ['baz'], baz: 'bar' }, bar: 'baz' },
         { baz: 'bar' },
@@ -37,9 +37,9 @@ test(`shallow`, () => {
 });
 test(`merge; merge is default`, () => {
   ['merge' as const, undefined].forEach((strategy) => {
-    expect(merge([{}, 'foo'], strategy)).toBe('foo');
+    expect(combine([{}, 'foo'], strategy)).toBe('foo');
     expect(
-      merge(
+      combine(
         [
           { foo: { bar: ['baz'], baz: 'bar' }, bar: 'baz' },
           { baz: 'bar' },
@@ -51,9 +51,9 @@ test(`merge; merge is default`, () => {
   });
 });
 test(`deep`, () => {
-  expect(merge([{}, 'foo'], 'deep')).toBe('foo');
+  expect(combine([{}, 'foo'], 'deep')).toBe('foo');
   expect(
-    merge(
+    combine(
       [
         { foo: { bar: ['baz'], baz: 'bar' }, bar: 'baz' },
         { baz: 'bar' },

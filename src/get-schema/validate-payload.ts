@@ -1,7 +1,7 @@
 import type { JSONSchema7 } from 'json-schema';
 import Ajv from 'ajv';
 
-import type { IPayload } from '../types';
+import type { Payload } from './definitions';
 
 const schema: JSONSchema7 = {
   type: 'object',
@@ -25,6 +25,7 @@ const schema: JSONSchema7 = {
 
 const ajv = new Ajv();
 const validate = ajv.compile(schema);
-export default function validatePayload(payload: IPayload): boolean {
+
+export function validatePayload(payload: Payload): boolean {
   return validate(payload) as boolean;
 }

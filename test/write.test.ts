@@ -3,8 +3,8 @@ import fs from 'node:fs';
 import { type Mock, beforeEach, expect, test, vi } from 'vitest';
 import yaml from 'js-yaml';
 
-import write from '../src/write';
-import read from '../src/read';
+import { write } from '../src/write';
+import { read } from '../src/read';
 
 vi.mock('node:fs');
 vi.mock('js-yaml');
@@ -31,7 +31,6 @@ test(`succeeds w/ defaults`, () => {
     [
       "foo/bar/baz.yml",
       undefined,
-      undefined,
     ]
   `);
   expect(mocks.dump.mock.calls[0]).toMatchInlineSnapshot(`
@@ -48,7 +47,10 @@ test(`succeeds w/ defaults`, () => {
 });
 test(`succeeds w/ options & schemas`, () => {
   expect(
-    write('foo/bar/baz.yml', 'foo/bar/foobar.yml', { ext: [] }, 'foo' as any)
+    write('foo/bar/baz.yml', 'foo/bar/foobar.yml', {
+      extensions: [],
+      schema: 'foo' as any
+    })
   ).toBeUndefined();
   expect(mocks.read).toHaveBeenCalledTimes(1);
   expect(mocks.dump).toHaveBeenCalledTimes(1);
@@ -57,9 +59,9 @@ test(`succeeds w/ options & schemas`, () => {
     [
       "foo/bar/baz.yml",
       {
-        "ext": [],
+        "extensions": [],
+        "schema": "foo",
       },
-      "foo",
     ]
   `);
   expect(mocks.dump.mock.calls[0]).toMatchInlineSnapshot(`

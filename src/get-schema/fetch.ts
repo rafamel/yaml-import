@@ -1,23 +1,21 @@
 import path from 'node:path';
 
-import type { Schema } from 'js-yaml';
+import type { Options } from '../definitions';
+import { read } from '../read';
+import type { Payload } from './definitions';
+import { getFiles } from './get-files';
 
-import type { IOptions, IPayload } from '../types';
-import read from '../read';
-import getFiles from './get-files';
-
-export default function fetch(
-  payload: IPayload,
+export function fetch(
+  payload: Payload,
   directory: string,
-  options: IOptions,
-  schema: Schema
+  options: Options
 ): any[] {
   const paths = Array.isArray(payload.paths) ? payload.paths : [payload.paths];
-  const files = getFiles(paths, directory, options, payload.recursive);
+  const files = getFiles(paths, directory, payload.recursive || false, options);
 
   return files
-    .map((file) =>
-      read(path.join(file.cwd, file.directory, file.name), options, schema)
-    )
+    .map((file) => {
+      return read(path.join(file.cwd, file.directory, file.name), options);
+    })
     .concat(Object.hasOwnProperty.call(payload, 'data') ? [payload.data] : []);
 }

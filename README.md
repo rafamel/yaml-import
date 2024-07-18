@@ -127,35 +127,33 @@ Takes in an object with fields:
 
 ### Command Line
 
-If there is no `output` file, the contents will be written to `stdout`. The list of `ext` -file extensions for directory imports, see [`write`](#writeinput-output-options-schemas)- must be comma separated, without spaces.
+If there is no `output` file, the contents will be written to `stdout`. The list of `ext` -file extensions for directory imports, see [`write`](#writesource-destination-options)- must be comma separated, without spaces.
 
 ```
 Usage:
-  $ yimp [options]
+  $ yimp file [options]
 
 Options:
-  -i, --input <path>        Path to input file
   -o, --output <path>       Path to output file, optional
   -e, --ext <extensions>    Extensions, comma separated, optional
   -h, --help                Show help
   -v, --version             Show version number
 
 Example:
-  $ yimp -i input-file.yml -o output-file.yml -e yml,yaml,raml
+  $ yimp source.yml -o destination.yml -e yml,yaml,raml
 ```
 
 ### Programatic Usage
 
-#### `write(input, output, options?, schema?)`
+#### `write(source, destination, options?)`
 
 Reads a *YAML* file and writes the output on a file.
 
-* `input`: **Required,** *string.* Path of the file to read.
-* `output`: **Required,** *string*. Path for the output file.
+* `source`: **Required,** *string.* Path of the file to read.
+* `destination`: **Required,** *string*. Path for the output file.
 * `options` **Optional,** *object:*
-  * `ext`: **Optional,** *string[].* List of extensions to use for directory imports. Default: `['.yml', '.yaml']`.
+  * `extensions`: **Optional,** *string[].* List of extensions to use for directory imports. Default: `['.yml', '.yaml']`.
   * [All other options taken by *js-yaml*](https://github.com/nodeca/js-yaml/blob/master/README.md#load-string---options-), except `schema`.
-* `schema`: **Optional.** *YAML* schema to extend.
 
 ```javascript
 import path from 'node:path';
@@ -163,25 +161,24 @@ import path from 'node:path';
 import { write } from 'yaml-import';
 
 write(
-  path.join(__dirname, 'foo/root.yml'),
-  path.join(__dirname, 'out/yaml.yml')
+  path.join(import.meta.dirname, 'foo/root.yml'),
+  path.join(import.meta.dirname, 'out/yaml.yml')
 );
 ```
 
-#### `read(input, options?, schema?)`
+#### `read(source, options?)`
 
 Reads a *YAML* file and returns the parsed object.
 
 * `input`: **Required,** *string.* Path of the file to read.
-* `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas).
-* `schema`: **Optional.** *YAML* schema to extend.
+* `options`: **Optional,** *object.* Same as those taken by [`write`](#writesource-destination-options).
 
 ```javascript
 import path from 'node:path';
 
 import { read } from 'yaml-import';
 
-const content = read(path.join(__dirname, 'foo/root.yml'));
+const content = read(path.join(import.meta.dirname, 'foo/root.yml'));
 ```
 
 We could write it later on with `js-yaml` and `fs`:
@@ -194,16 +191,15 @@ import { dump } from 'js-yaml';
 // To YAML
 const text = dump(content);
 // Write to file
-fs.writeFileSync(path.join(__dirname, 'out/yaml.yml'), text);
+fs.writeFileSync(path.join(import.meta.dirname, 'out/yaml.yml'), text);
 ```
 
-### `getSchema(cwd, options?, schemas?)`
+### `getSchema(cwd, options?)`
 
 For flexible usage with *js-yaml,* `getSchema` returns a `schema` you can pass to [*js-yaml*](https://www.npmjs.com/package/js-yaml) functions.
 
 * `cwd`: **Required,** *string.* Base directory to read imported files from.
-* `options`: **Optional,** *object.* Same as those taken by [`write`](#writeinput-output-options-schemas). Used when files to import are loaded.
-* `schema`: **Optional.** *YAML* schema to extend.
+* `options`: **Optional,** *object.* Same as those taken by [`write`](#writesource-destination-options). Used when files to import are loaded.
 
 ```javascript
 import path from 'node:path';
@@ -212,8 +208,8 @@ import fs from 'node:fs';
 import { load } from 'js-yaml';
 import { getSchema } from 'yaml-import';
 
-const src = fs.readFileSync(path.join(__dirname, 'foo/root.yml'), 'utf8');
-const cwd = path.join(__dirname, 'foo');
+const src = fs.readFileSync(path.join(import.meta.dirname, 'foo/root.yml'), 'utf8');
+const cwd = path.join(import.meta.dirname, 'foo');
 const schema = getSchema(cwd);
 const content = load(src, { schema });
 ```

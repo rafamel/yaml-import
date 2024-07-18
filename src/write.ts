@@ -1,15 +1,14 @@
 import fs from 'node:fs';
 
-import { type Schema, dump } from 'js-yaml';
+import { dump } from 'js-yaml';
 
-import type { IOptions } from './types';
-import read from './read';
+import type { Options } from './definitions';
+import { read } from './read';
 
-export default function write(
-  input: string,
-  output: string,
-  options?: IOptions | null,
-  schema?: Schema
+export function write(
+  source: string,
+  destination: string,
+  options?: Options | null
 ): void {
-  fs.writeFileSync(output, dump(read(input, options, schema)));
+  fs.writeFileSync(destination, dump(read(source, options)));
 }

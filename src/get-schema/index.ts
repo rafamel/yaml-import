@@ -1,19 +1,21 @@
-import { DEFAULT_SCHEMA, type Schema, Type } from 'js-yaml';
+import path from 'node:path';
 
-import type { IOptions, IPayload } from '../types';
-import read from '../read';
-import fetch from './fetch';
-import merge from './merge';
-import createTree from './create-tree';
-import validatePayload from './validate-payload';
-import absolute from './absolute';
+import { type Schema, Type } from 'js-yaml';
 
-export default function getSchema(
-  cwd: string,
-  options?: IOptions | null,
-  schema: Schema = DEFAULT_SCHEMA
-): Schema {
-  const opts = Object.assign({ ext: ['.yml', '.yaml'] }, options);
+import type { Options } from '../definitions';
+import { defaults } from '../defaults';
+import { read } from '../read';
+import type { Payload } from './definitions';
+import { fetch } from './fetch';
+import { combine } from './combine';
+import { createTree } from './create-tree';
+import { validatePayload } from './validate-payload';
+
+export function getSchema(cwd: string, options?: Options | null): Schema {
+  const opts = {
+    ...options,
+    extensions: options?.extensions || defaults.extensions
+  };
 
   const types = [
     new Type('tag:yaml.org,2002:import/single', {
@@ -22,7 +24,7 @@ export default function getSchema(
         return typeof file === 'string';
       },
       construct(file) {
-        return read(absolute({ file, cwd }), opts, schema);
+        return read(path.resolve(cwd, file), opts);
       }
     }),
     new Type('tag:yaml.org,2002:import/sequence', {
@@ -31,8 +33,8 @@ export default function getSchema(
         return Array.isArray(files) && files.length > 0;
       },
       construct(files) {
-        const payload: IPayload = { paths: files, strategy: 'sequence' };
-        return merge(fetch(payload, cwd, opts, schema), payload.strategy);
+        const payload: Payload = { paths: files, strategy: 'sequence' };
+        return combine(fetch(payload, cwd, opts), payload.strategy);
       }
     }),
     new Type('tag:yaml.org,2002:import/shallow', {
@@ -41,8 +43,8 @@ export default function getSchema(
         return Array.isArray(files) && files.length > 0;
       },
       construct(files) {
-        const payload: IPayload = { paths: files, strategy: 'shallow' };
-        return merge(fetch(payload, cwd, opts, schema), payload.strategy);
+        const payload: Payload = { paths: files, strategy: 'shallow' };
+        return combine(fetch(payload, cwd, opts), payload.strategy);
       }
     }),
     new Type('tag:yaml.org,2002:import/merge', {
@@ -51,8 +53,8 @@ export default function getSchema(
         return Array.isArray(files) && files.length > 0;
       },
       construct(files) {
-        const payload: IPayload = { paths: files, strategy: 'merge' };
-        return merge(fetch(payload, cwd, opts, schema), payload.strategy);
+        const payload: Payload = { paths: files, strategy: 'merge' };
+        return combine(fetch(payload, cwd, opts), payload.strategy);
       }
     }),
     new Type('tag:yaml.org,2002:import/deep', {
@@ -61,34 +63,36 @@ export default function getSchema(
         return Array.isArray(files) && files.length > 0;
       },
       construct(files) {
-        const payload: IPayload = { paths: files, strategy: 'deep' };
-        return merge(fetch(payload, cwd, opts, schema), payload.strategy);
+        const payload: Payload = { paths: files, strategy: 'deep' };
+        return combine(fetch(payload, cwd, opts), payload.strategy);
       }
     }),
     new Type('tag:yaml.org,2002:import/payload', {
       kind: 'mapping',
-      resolve(payload: IPayload) {
+      resolve(payload: Payload) {
         return validatePayload(payload);
       },
-      construct(payload: IPayload) {
-        return merge(fetch(payload, cwd, opts, schema), payload.strategy);
+      construct(payload: Payload) {
+        return combine(fetch(payload, cwd, opts), payload.strategy);
       }
     }),
     new Type('tag:yaml.org,2002:import/tree', {
       kind: 'mapping',
-      resolve(payload: IPayload) {
+      resolve(payload: Payload) {
         return validatePayload(payload);
       },
-      construct(payload: IPayload) {
+      construct(payload: Payload) {
         const paths = Array.isArray(payload.paths)
           ? payload.paths
           : [payload.paths];
         const data = paths
-          .map((path) => createTree(path, cwd, opts, schema, payload.recursive))
+          .map((path) => {
+            return createTree(path, cwd, payload.recursive || false, opts);
+          })
           .concat(payload.data || []);
-        return merge(data, payload.strategy);
+        return combine(data, payload.strategy);
       }
     })
   ];
-  return schema.extend(types);
+  return (options?.schema || defaults.schema).extend(types);
 }
