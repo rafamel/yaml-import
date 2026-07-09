@@ -5,7 +5,7 @@ import { expect, test } from 'vitest';
 import { read } from '../src/read';
 import json from './fixtures/result.json';
 
-const root = path.join(__dirname, 'fixtures/root.yml');
+const root = path.join(import.meta.dirname, 'fixtures/root.yml');
 
 test(`wo/ extensions`, () => {
   const result = read(root);

@@ -1,9 +1,9 @@
 import path from 'node:path';
 import process from 'node:process';
 
+import arg from 'arg';
 import { flags, loadPackage, safePairs } from 'cli-belt';
 import { stripIndent as indent } from 'common-tags';
-import arg from 'arg';
 import { dump } from 'js-yaml';
 
 import type { Options } from '../definitions';
@@ -14,7 +14,7 @@ export async function main(
   argv: string[],
   print: (data: any) => void
 ): Promise<void> {
-  const pkg = await loadPackage(__dirname, { title: true });
+  const pkg = await loadPackage(import.meta.dirname, { title: true });
   const help = indent`
     ${pkg.description || ''}
 
